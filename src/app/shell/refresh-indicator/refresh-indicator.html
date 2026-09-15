@@ -1,0 +1,23 @@
+<div class="refresh">
+  <span
+    class="refresh__text pl-num"
+    [class.pl-coral]="stale()"
+    [title]="shell.lastSnapshotAt() ?? ''"
+    >{{ text() }}</span
+  >
+  <button
+    type="button"
+    class="pl-btn pl-btn--ghost pl-btn--icon"
+    (click)="shell.refresh()"
+    [disabled]="shell.refreshing()"
+    [attr.aria-label]="shell.refreshing() ? 'Refreshing' : 'Refresh now'"
+    [attr.aria-busy]="shell.refreshing()"
+  >
+    <lucide-icon
+      [img]="icons.refresh"
+      [size]="18"
+      [class.spin]="shell.refreshing()"
+      aria-hidden="true"
+    />
+  </button>
+</div>

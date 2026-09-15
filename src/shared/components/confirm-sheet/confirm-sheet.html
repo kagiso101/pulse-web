@@ -1,0 +1,72 @@
+@if (open()) {
+  <div class="sheet-backdrop" (click)="onBackdrop()">
+    <div
+      #panel
+      class="sheet"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-labelledby]="titleId"
+      [attr.aria-describedby]="descId"
+      [attr.aria-busy]="busy()"
+      tabindex="-1"
+      (click)="$event.stopPropagation()"
+      (keydown)="onKeydown($event)"
+    >
+      <div class="sheet__grip" aria-hidden="true"></div>
+      <h2 class="sheet__title" [id]="titleId">{{ title() }}</h2>
+      <p class="sheet__sentence" [id]="descId">{{ sentence() }}</p>
+
+      @if (result(); as r) {
+        <div
+          class="pl-result sheet__result"
+          [class.pl-result--ok]="r.result === 'ok'"
+          [class.pl-result--failed]="r.result === 'failed'"
+          role="status"
+        >
+          <strong>{{ r.result === 'ok' ? 'Done.' : 'Failed.' }}</strong>
+          <span>{{ r.message }}</span>
+        </div>
+        <p class="sheet__log pl-note">
+          Logged as action <span class="pl-num">{{ r.actionLogId }}</span
+          >.
+        </p>
+        <div class="sheet__actions">
+          <button
+            type="button"
+            class="pl-btn pl-btn--primary"
+            data-focus-first
+            (click)="dismiss.emit()"
+          >
+            Close
+          </button>
+        </div>
+      } @else {
+        @if (error(); as e) {
+          <div class="pl-result pl-result--failed sheet__result" role="alert">
+            <strong>Not sent.</strong>
+            <span>{{ e }}</span>
+          </div>
+        }
+        <div class="sheet__actions">
+          <button
+            type="button"
+            class="pl-btn"
+            data-focus-first
+            [disabled]="busy()"
+            (click)="cancel.emit()"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="pl-btn pl-btn--primary"
+            [disabled]="busy()"
+            (click)="confirm.emit()"
+          >
+            {{ busy() ? 'Working…' : confirmLabel() }}
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+}

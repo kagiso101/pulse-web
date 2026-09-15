@@ -1,0 +1,16 @@
+<div class="big-number" [class.big-number--null]="isNull()">
+  <span class="big-number__label">{{ label() }}</span>
+  <span
+    class="big-number__value pl-num"
+    [class.big-number__value--bad]="tone() === 'bad' && !isNull()"
+    [class.big-number__value--good]="tone() === 'good' && !isNull()"
+  >
+    {{ display() }}
+    @if (denominatorDisplay() !== null && !isNull()) {
+      <span class="big-number__denominator"> / {{ denominatorDisplay() }}</span>
+    }
+  </span>
+  @if (isNull() && caption()) {
+    <span class="big-number__caption">{{ caption() }}</span>
+  }
+</div>

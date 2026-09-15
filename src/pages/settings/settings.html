@@ -1,0 +1,451 @@
+<div class="pl-page settings">
+  <header class="pl-page-head">
+    <div>
+      <h1 class="pl-page-title">Settings</h1>
+      <p class="pl-note">Alerts, connectors, the project registry, client links.</p>
+    </div>
+  </header>
+
+  <!-- Account -->
+  <section class="pl-card" aria-labelledby="s-account">
+    <div class="pl-card-head">
+      <h2 class="pl-section-title" id="s-account">Account</h2>
+      <button type="button" class="pl-btn pl-btn--sm" (click)="auth.logout()">Sign out</button>
+    </div>
+    @if (settings.settings(); as s) {
+      <dl class="facts">
+        <div>
+          <dt>Allowed account</dt>
+          <dd>{{ s.allowedEmailMasked }}</dd>
+        </div>
+        <div>
+          <dt>Signed in as</dt>
+          <dd>{{ auth.email() ?? '—' }}</dd>
+        </div>
+        <div>
+          <dt>Timezone</dt>
+          <dd>{{ s.timezone }}</dd>
+        </div>
+      </dl>
+    } @else if (settings.loading()) {
+      <div class="pl-skeleton skel" aria-hidden="true"></div>
+    } @else if (settings.error(); as e) {
+      <p class="pl-result pl-result--failed" role="alert">{{ e }}</p>
+    }
+  </section>
+
+  <!-- Connectors -->
+  <section class="pl-card" aria-labelledby="s-connectors">
+    <div class="pl-card-head">
+      <h2 class="pl-section-title" id="s-connectors">Connectors</h2>
+      <span class="pl-note">Configured on pulse-api via Secret Manager — nothing is set here.</span>
+    </div>
+    <div class="pl-row">
+      @for (c of connectorChips(); track c.label) {
+        <span
+          class="pl-chip"
+          [class.pl-chip--green]="c.on === true"
+          [class.pl-chip--muted]="c.on !== true"
+        >
+          {{ c.label }} · {{ c.on === null ? '…' : c.on ? 'configured' : 'not configured' }}
+        </span>
+      }
+    </div>
+  </section>
+
+  <!-- Notification channel -->
+  <section class="pl-card" aria-labelledby="s-channel">
+    <div class="pl-card-head">
+      <h2 class="pl-section-title" id="s-channel">Notification channel</h2>
+      @if (settings.saving()) {
+        <span class="pl-note">Saving…</span>
+      }
+    </div>
+    <p class="pl-note channel__lede">
+      Default for rules that say WhatsApp when WhatsApp is not configured.
+    </p>
+    @if (settings.settings(); as s) {
+      <div class="pl-row" role="radiogroup" aria-label="Notification channel">
+        <button
+          type="button"
+          class="pl-chip-btn"
+          role="radio"
+          [attr.aria-checked]="s.notificationChannel === 'email'"
+          (click)="onChannel('email')"
+          [disabled]="settings.saving()"
+        >
+          Email
+          @if (!s.emailConfigured) {
+            <span class="pl-muted">(not configured)</span>
+          }
+        </button>
+        <button
+          type="button"
+          class="pl-chip-btn"
+          role="radio"
+          [attr.aria-checked]="s.notificationChannel === 'whatsapp'"
+          (click)="onChannel('whatsapp')"
+          [disabled]="settings.saving() || !s.whatsappConfigured"
+          [title]="s.whatsappConfigured ? '' : 'WhatsApp is not configured on the API'"
+        >
+          WhatsApp
+          @if (!s.whatsappConfigured) {
+            <span class="pl-muted">(not configured)</span>
+          }
+        </button>
+      </div>
+    }
+  </section>
+
+  <!-- Alert rules -->
+  <section class="pl-card" aria-labelledby="s-rules">
+    <div class="pl-card-head">
+      <h2 class="pl-section-title" id="s-rules">Alert rules</h2>
+      @if (alerts.saving()) {
+        <span class="pl-note">Saving…</span>
+      }
+    </div>
+    @if (alerts.error(); as e) {
+      <p class="pl-result pl-result--failed" role="alert">{{ e }}</p>
+    }
+    @if (alerts.rules().length === 0 && alerts.loading()) {
+      <div class="pl-skeleton skel" aria-hidden="true"></div>
+    } @else if (alerts.rules().length === 0) {
+      <p class="pl-empty">No alert rules seeded yet.</p>
+    } @else {
+      <ul class="rules">
+        @for (r of alerts.rules(); track r.id) {
+          <li class="rule" [class.rule--off]="!r.enabled">
+            <button
+              type="button"
+              class="pl-switch"
+              role="switch"
+              [attr.aria-checked]="r.enabled"
+              [attr.aria-label]="(r.enabled ? 'Disable ' : 'Enable ') + r.label"
+              (click)="toggleRule(r)"
+              [disabled]="alerts.saving()"
+            ></button>
+            <div class="rule__main">
+              <strong class="rule__label">{{ r.label }}</strong>
+              <span class="rule__kind pl-note"
+                >{{ r.kind.replaceAll('_', ' ') }}
+                @if (r.projectId) {
+                  · one project
+                }
+              </span>
+            </div>
+            <div class="rule__controls">
+              @if (hasThreshold(r)) {
+                <label class="rule__field">
+                  <span class="sr-only">Threshold for {{ r.label }}</span>
+                  <input
+                    type="number"
+                    class="pl-input pl-input--sm pl-input--num rule__threshold"
+                    inputmode="numeric"
+                    min="0"
+                    [value]="r.threshold ?? ''"
+                    (change)="onThreshold(r, $event)"
+                    [disabled]="alerts.saving()"
+                    placeholder="threshold"
+                  />
+                </label>
+              }
+              <label class="rule__field">
+                <span class="sr-only">Channel for {{ r.label }}</span>
+                <select
+                  class="pl-select pl-select--sm"
+                  (change)="onRuleChannel(r, $event)"
+                  [disabled]="alerts.saving()"
+                >
+                  @for (c of channels; track c) {
+                    <option [value]="c" [selected]="c === r.channel">{{ channelLabels[c] }}</option>
+                  }
+                </select>
+              </label>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+
+  <!-- Project registry -->
+  <section class="pl-card" aria-labelledby="s-registry">
+    <div class="pl-card-head">
+      <h2 class="pl-section-title" id="s-registry">Project registry</h2>
+      <button
+        type="button"
+        class="pl-btn pl-btn--primary pl-btn--sm"
+        (click)="startAdd()"
+        [disabled]="projects.saving()"
+      >
+        <lucide-icon [img]="icons.plus" [size]="16" aria-hidden="true" /> Add project
+      </button>
+    </div>
+    <p class="pl-note registry__lede">
+      Projects are configuration, not code. Five fields make a pill; the rest switch connectors on.
+    </p>
+
+    @if (formOpen()) {
+      <form class="registry__form" [formGroup]="form" (ngSubmit)="submitForm()">
+        <h3 class="pl-display-sm">{{ editingId() ? 'Edit ' + editingName() : 'New project' }}</h3>
+        <div class="pl-form-grid">
+          <label class="pl-field"
+            ><span>Slug *</span
+            ><input
+              class="pl-input pl-num"
+              formControlName="slug"
+              placeholder="bruja-thembi"
+              autocomplete="off"
+              required
+          /></label>
+          <label class="pl-field"
+            ><span>Name *</span><input class="pl-input" formControlName="name" required
+          /></label>
+          <label class="pl-field">
+            <span>Kind *</span>
+            <select class="pl-select" formControlName="kind">
+              @for (k of kinds; track k) {
+                <option [value]="k">{{ kindLabels[k] }}</option>
+              }
+            </select>
+          </label>
+          <label class="pl-field"
+            ><span>Site URL</span
+            ><input class="pl-input" formControlName="siteUrl" type="url" placeholder="https://…"
+          /></label>
+          <label class="pl-field"
+            ><span>GA4 property id</span
+            ><input class="pl-input pl-num" formControlName="ga4PropertyId" placeholder="512345678"
+          /></label>
+          <label class="pl-field"
+            ><span>GA4 measurement id</span
+            ><input
+              class="pl-input pl-num"
+              formControlName="ga4MeasurementId"
+              placeholder="G-XXXXXXXXXX"
+          /></label>
+          <label class="pl-field"
+            ><span>API health URL</span
+            ><input
+              class="pl-input"
+              formControlName="apiHealthUrl"
+              type="url"
+              placeholder="https://…/actuator/health"
+          /></label>
+          <label class="pl-field"
+            ><span>Netlify site id</span
+            ><input class="pl-input pl-num" formControlName="netlifySiteId"
+          /></label>
+          <label class="pl-field"
+            ><span>Cloud Run service</span
+            ><input class="pl-input" formControlName="cloudRunService" placeholder="bookr-api"
+          /></label>
+          <label class="pl-field"
+            ><span>GitHub repos</span
+            ><input
+              class="pl-input"
+              formControlName="githubRepos"
+              placeholder="owner/repo, owner/other"
+          /></label>
+          <label class="pl-field"
+            ><span>Colour</span
+            ><input class="pl-input pl-num" formControlName="color" placeholder="#0E5A45"
+          /></label>
+          <label class="pl-field"
+            ><span>Sort order</span
+            ><input class="pl-input pl-num" type="number" formControlName="sortOrder"
+          /></label>
+          <label class="pl-check"
+            ><input type="checkbox" formControlName="active" /> Active (shows a pill)</label
+          >
+        </div>
+        @if (form.touched && form.invalid) {
+          <p class="pl-note pl-note--coral">
+            Slug (lowercase, dashes), name and kind are required.
+          </p>
+        }
+        <div class="pl-row registry__actions">
+          <button type="button" class="pl-btn" (click)="cancelForm()">Cancel</button>
+          <button type="submit" class="pl-btn pl-btn--primary" [disabled]="projects.saving()">
+            {{ projects.saving() ? 'Saving…' : editingId() ? 'Save changes' : 'Add project' }}
+          </button>
+        </div>
+      </form>
+    }
+
+    @if (projects.items().length === 0 && projects.loading()) {
+      <div class="pl-skeleton skel" aria-hidden="true"></div>
+    } @else if (projects.items().length === 0) {
+      <p class="pl-empty">The registry is empty.</p>
+    } @else {
+      <ul class="registry">
+        @for (p of projects.items(); track p.id) {
+          <li class="reg" [class.reg--inactive]="!p.active">
+            <div class="reg__main">
+              <div class="reg__name-line">
+                <strong>{{ p.name }}</strong>
+                <span class="pl-chip pl-chip--muted">{{ kindLabels[p.kind] }}</span>
+                @if (!p.active) {
+                  <span class="pl-chip pl-chip--muted">inactive</span>
+                }
+                @if (p.autoDiscovered) {
+                  <span class="pl-chip pl-chip--amber">auto-discovered</span>
+                }
+              </div>
+              <span class="reg__meta pl-note">
+                <span class="pl-num">/{{ p.slug }}</span>
+                @if (p.siteUrl) {
+                  · {{ p.siteUrl }}
+                }
+                @if (p.ga4PropertyId) {
+                  · GA4 <span class="pl-num">{{ p.ga4PropertyId }}</span>
+                }
+                @if (p.cloudRunService) {
+                  · Cloud Run {{ p.cloudRunService }}
+                }
+                @if (p.netlifySiteId) {
+                  · Netlify
+                }
+              </span>
+            </div>
+            <div class="reg__actions">
+              <button
+                type="button"
+                class="pl-btn pl-btn--sm"
+                (click)="startEdit(p)"
+                [disabled]="projects.saving()"
+              >
+                <lucide-icon [img]="icons.edit" [size]="14" aria-hidden="true" /> Edit
+              </button>
+              @if (p.active) {
+                <button
+                  type="button"
+                  class="pl-btn pl-btn--danger pl-btn--sm"
+                  (click)="deactivate(p)"
+                  [disabled]="projects.saving()"
+                >
+                  Deactivate
+                </button>
+              }
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+
+  <!-- Client view links -->
+  <section class="pl-card" aria-labelledby="s-links">
+    <div class="pl-card-head">
+      <h2 class="pl-section-title" id="s-links">Client links</h2>
+      <span class="pl-note">Read-only card per client site. The link is shown once.</span>
+    </div>
+    @if (projects.clientSites().length === 0) {
+      <p class="pl-empty">No client sites in the registry yet.</p>
+    } @else {
+      <ul class="links">
+        @for (p of projects.clientSites(); track p.id) {
+          <li class="link">
+            <div class="link__main">
+              <strong>{{ p.name }}</strong>
+              <span
+                class="pl-chip"
+                [class.pl-chip--green]="p.hasClientViewToken"
+                [class.pl-chip--muted]="!p.hasClientViewToken"
+              >
+                {{ p.hasClientViewToken ? 'link active' : 'no link' }}
+              </span>
+            </div>
+            @if (tokenFor(p.id); as t) {
+              <div class="link__reveal" role="status">
+                <p class="pl-note pl-note--amber">Copy this now — it will not be shown again.</p>
+                <div class="link__url">
+                  <input
+                    class="pl-input pl-input--sm pl-num"
+                    type="text"
+                    readonly
+                    [value]="t.url"
+                    (focus)="selectAll($event)"
+                    aria-label="Client link"
+                  />
+                  <button
+                    type="button"
+                    class="pl-btn pl-btn--primary pl-btn--sm"
+                    (click)="copy(t.url)"
+                  >
+                    <lucide-icon [img]="icons.copy" [size]="14" aria-hidden="true" /> Copy
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  class="pl-btn pl-btn--ghost pl-btn--sm"
+                  (click)="projects.clearTokenResult()"
+                >
+                  Done
+                </button>
+              </div>
+            }
+            <div class="link__actions">
+              <button
+                type="button"
+                class="pl-btn pl-btn--sm"
+                (click)="generateToken(p)"
+                [disabled]="projects.saving()"
+              >
+                {{ p.hasClientViewToken ? 'Regenerate link' : 'Generate link' }}
+              </button>
+              @if (p.hasClientViewToken) {
+                <button
+                  type="button"
+                  class="pl-btn pl-btn--danger pl-btn--sm"
+                  (click)="revokeToken(p)"
+                  [disabled]="projects.saving()"
+                >
+                  Revoke
+                </button>
+              }
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+
+  <!-- Costs link -->
+  <section class="pl-card costs-link">
+    <div>
+      <h2 class="pl-section-title">Manual costs</h2>
+      <p class="pl-note">
+        Netlify, Brevo and PayFast are entered by hand until their APIs are worth wiring.
+      </p>
+    </div>
+    <a routerLink="/costs" class="pl-btn pl-btn--sm">Open costs</a>
+  </section>
+
+  <!-- Notices -->
+  <section class="pl-card" aria-labelledby="s-notices">
+    <div class="pl-card-head">
+      <h2 class="pl-section-title" id="s-notices">Notices</h2>
+      <span class="pl-label pl-num">{{ notices.unreadCount() }} unread</span>
+    </div>
+    @if (noticeRows().length === 0) {
+      <p class="pl-empty">No unread notices.</p>
+    } @else {
+      <ul class="notices">
+        @for (n of noticeRows(); track n.id) {
+          <li class="notice">
+            <div class="notice__main">
+              <strong>{{ n.title }}</strong>
+              <span class="pl-note">{{ n.body }}</span>
+              <span class="pl-note pl-num">{{ n.when }}</span>
+            </div>
+            <button type="button" class="pl-btn pl-btn--sm" (click)="notices.markRead(n.id)">
+              Mark read
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+</div>

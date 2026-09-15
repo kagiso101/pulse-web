@@ -1,0 +1,33 @@
+<section class="pl-card revenue">
+  <div class="pl-card-head">
+    <h3 class="pl-section-title">Revenue</h3>
+    <span class="pl-label">This month</span>
+  </div>
+
+  @if (!revenue().available) {
+    <p class="revenue__big pl-num pl-muted">—</p>
+    <p class="pl-note">needs Bookvas endpoint — platform-wide payments are not exposed yet.</p>
+  } @else {
+    <p class="revenue__big pl-num">{{ thisMonth() }}</p>
+    <dl class="revenue__grid">
+      <div>
+        <dt>Last month</dt>
+        <dd class="pl-num">{{ lastMonth() }}</dd>
+      </div>
+      <div>
+        <dt>Projected</dt>
+        <dd class="pl-num">{{ projected() }}</dd>
+      </div>
+      <div>
+        <dt>vs last month</dt>
+        <dd
+          class="pl-num"
+          [class.pl-green]="delta()?.up"
+          [class.pl-amber]="delta() && !delta()!.up"
+        >
+          {{ delta()?.display ?? '—' }}
+        </dd>
+      </div>
+    </dl>
+  }
+</section>

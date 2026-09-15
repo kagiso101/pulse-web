@@ -1,0 +1,29 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 36px;
+}
+
+.sparkline {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.sparkline__line {
+  fill: none;
+  stroke: var(--pl-green-text);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.sparkline__area {
+  fill: var(--pl-green-tint);
+}
+
+.sparkline__empty {
+  stroke: var(--pl-border);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}

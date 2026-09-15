@@ -1,0 +1,14 @@
+<nav class="nav" aria-label="Main">
+  @for (item of items; track item.path) {
+    <a
+      class="nav__item"
+      [routerLink]="item.path"
+      routerLinkActive="nav__item--active"
+      [routerLinkActiveOptions]="{ exact: item.exact }"
+      ariaCurrentWhenActive="page"
+    >
+      <lucide-icon [img]="item.icon" [size]="20" [strokeWidth]="1.75" aria-hidden="true" />
+      <span class="nav__label">{{ item.label }}</span>
+    </a>
+  }
+</nav>

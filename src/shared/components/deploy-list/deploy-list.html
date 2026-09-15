@@ -1,0 +1,32 @@
+@if (rows().length === 0) {
+  <p class="pl-empty">{{ emptyText() }}</p>
+} @else {
+  <ol class="deploys">
+    @for (d of rows(); track d.id) {
+      <li class="deploy">
+        <div class="deploy__line">
+          <code class="deploy__sha pl-num" [title]="d.sha">{{ d.shaShort }}</code>
+          @if (d.branch) {
+            <span class="pl-chip">{{ d.branch }}</span>
+          }
+          @if (d.environment) {
+            <span class="pl-chip pl-chip--green">{{ d.environment }}</span>
+          }
+          <span class="pl-chip pl-chip--muted">{{ d.sourceLabel }}</span>
+          @if (d.projectName) {
+            <span class="deploy__project">{{ d.projectName }}</span>
+          }
+          <time class="deploy__when pl-num" [attr.datetime]="d.deployedAt" [title]="d.deployedAt">{{
+            d.when
+          }}</time>
+        </div>
+        <p class="deploy__message" [class.pl-muted]="!d.message">
+          {{ d.message || 'No commit message' }}
+          @if (d.repo) {
+            <span class="deploy__repo">· {{ d.repo }}</span>
+          }
+        </p>
+      </li>
+    }
+  </ol>
+}

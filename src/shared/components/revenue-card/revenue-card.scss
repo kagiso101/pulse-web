@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.revenue__big {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+.revenue__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  dt {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--pl-text-muted);
+  }
+  dd {
+    margin: 2px 0 0;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

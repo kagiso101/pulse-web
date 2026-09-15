@@ -1,0 +1,11 @@
+<span
+  class="pl-dot"
+  [class.pl-dot--up]="state() === 'up'"
+  [class.pl-dot--down]="state() === 'down'"
+  [class.pl-dot--unknown]="state() === 'unknown'"
+  role="img"
+  [attr.aria-label]="label()"
+></span>
+@if (showLabel()) {
+  <span class="status-dot__label" [class.pl-coral]="state() === 'down'">{{ label() }}</span>
+}

@@ -1,0 +1,19 @@
+<section class="pl-card founder">
+  <div class="pl-card-head">
+    <h3 class="pl-section-title">Founder seats</h3>
+  </div>
+  <p class="founder__big pl-num">
+    {{ used() }}<span class="founder__total"> / {{ total() }}</span>
+  </p>
+  <div
+    class="founder__track"
+    role="progressbar"
+    [attr.aria-valuenow]="founder().used ?? 0"
+    aria-valuemin="0"
+    [attr.aria-valuemax]="founder().total ?? 0"
+    [attr.aria-label]="'Founder seats claimed: ' + used() + ' of ' + total()"
+  >
+    <div class="founder__bar" [style.width.%]="pct()"></div>
+  </div>
+  <p class="pl-note" [class.pl-green]="remaining() === 0">{{ remainingText() }}</p>
+</section>

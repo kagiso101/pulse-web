@@ -1,0 +1,140 @@
+<div class="pl-page project">
+  @if (dashboard.initialLoading()) {
+    <div class="pl-skeleton project__skeleton" aria-hidden="true"></div>
+    <div class="pl-skeleton project__skeleton project__skeleton--tall" aria-hidden="true"></div>
+  } @else if (!d() && dashboard.error(); as e) {
+    <section class="pl-card project__error" role="alert">
+      <p class="pl-result pl-result--failed">{{ e }}</p>
+      <a routerLink="/" class="pl-btn pl-btn--sm">Back to All</a>
+    </section>
+  } @else if (d(); as dash) {
+    @if (dashboard.error(); as e) {
+      <p class="pl-result pl-result--failed" role="alert">{{ e }} — showing the last good data.</p>
+    }
+
+    <header class="pl-card project__head">
+      <div class="project__title">
+        <pl-status-dot [state]="dash.header.status" [showLabel]="true" />
+        <h1 class="pl-page-title">{{ dash.project.name }}</h1>
+        <span class="pl-chip pl-chip--muted">{{ kindLabel() }}</span>
+        @if (dash.project.status.openAlerts > 0) {
+          <span class="pl-chip pl-chip--coral"
+            ><span class="pl-num">{{ dash.project.status.openAlerts }}</span> open alerts</span
+          >
+        }
+      </div>
+      <dl class="project__facts">
+        <div>
+          <dt>Uptime · {{ rangeLabel() }}</dt>
+          <dd class="pl-num" [class.pl-coral]="uptimeBad()">{{ uptime() }}</dd>
+        </div>
+        <div>
+          <dt>Latency</dt>
+          <dd class="pl-num">{{ latency() }}</dd>
+        </div>
+        <div class="project__deploy">
+          <dt>Last deploy</dt>
+          <dd>
+            @if (lastDeploy(); as ld) {
+              <code class="pl-num project__sha">{{ ld.sha }}</code>
+              @if (ld.branch) {
+                <span class="pl-muted">· {{ ld.branch }}</span>
+              }
+              <span class="pl-muted">·</span> <span class="pl-num">{{ ld.when }}</span>
+            } @else {
+              <span class="pl-muted">—</span>
+            }
+          </dd>
+        </div>
+        @if (dash.project.siteUrl; as site) {
+          <div>
+            <dt>Site</dt>
+            <dd>
+              <a [href]="site" target="_blank" rel="noopener">{{ hostOf(site) }}</a>
+            </dd>
+          </div>
+        }
+      </dl>
+    </header>
+
+    @if (dash.traffic.available) {
+      <section class="pl-card">
+        <div class="pl-card-head">
+          <h2 class="pl-section-title">Traffic · {{ rangeLabel() }}</h2>
+        </div>
+        <pl-traffic-chart [series]="dash.traffic.series" />
+      </section>
+      <div class="pl-grid-3">
+        <pl-ranked-list title="Top pages" [rows]="topPages()" valueLabel="views" />
+        <pl-ranked-list title="Sources" [rows]="sources()" valueLabel="sessions" />
+        <pl-ranked-list
+          title="Key events"
+          [rows]="keyEvents()"
+          valueLabel="count"
+          emptyText="No key events yet — file_download, click and scroll appear here."
+        />
+      </div>
+    } @else {
+      <section class="pl-card">
+        <p class="pl-empty">
+          No GA4 data yet.
+          @if (!dash.project.ga4PropertyId) {
+            <a routerLink="/settings">Add the GA4 property id in Settings</a> to start collecting.
+          }
+        </p>
+      </section>
+    }
+
+    @if (dash.bookvas; as bv) {
+      <pl-funnel-bars [funnel]="bv.funnel" />
+      <div class="pl-grid-3">
+        <pl-revenue-card [revenue]="bv.revenue" />
+        <pl-founder-countdown [founder]="bv.founder" />
+        <pl-email-health-card [health]="bv.emailHealth" />
+      </div>
+      <pl-tenant-leaderboard
+        [tenants]="bv.tenants"
+        [busy]="actions.busy()"
+        (action)="onAction($event)"
+      />
+      <pl-platform-events [events]="bv.events" />
+    }
+
+    @if (dash.project.cloudRunService || dash.project.netlifySiteId) {
+      <section class="pl-card">
+        <div class="pl-card-head">
+          <h2 class="pl-section-title">Actions</h2>
+          <span class="pl-note">Each one asks you to confirm first.</span>
+        </div>
+        <div class="pl-row">
+          @if (dash.project.cloudRunService; as svc) {
+            <button type="button" class="pl-btn" (click)="restart(svc)" [disabled]="actions.busy()">
+              Restart {{ svc }}
+            </button>
+          }
+          @if (dash.project.netlifySiteId; as site) {
+            <button
+              type="button"
+              class="pl-btn"
+              (click)="redeploy(site, dash.project.name)"
+              [disabled]="actions.busy()"
+            >
+              Redeploy {{ dash.project.name }}
+            </button>
+          }
+        </div>
+      </section>
+    }
+
+    <section class="pl-card">
+      <div class="pl-card-head">
+        <h2 class="pl-section-title">Deploys</h2>
+        <a routerLink="/deploys" class="pl-note">All deploys →</a>
+      </div>
+      <pl-deploy-list
+        [deploys]="dash.deploys"
+        emptyText="No deploys recorded for this project yet."
+      />
+    </section>
+  }
+</div>

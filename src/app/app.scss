@@ -1,0 +1,140 @@
+/* Phone-first shell: sticky header, bottom tabs, Ask bar above the tabs.
+   ≥768px: left rail + wider content; Ask bar spans the content column. */
+
+.shell {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+/* ------- header ------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(15, 18, 17, 0.94);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--pl-border-subtle);
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.topbar__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: var(--pl-topbar-h);
+  padding: 0 12px 0 16px;
+}
+
+.topbar__row--range {
+  min-height: 0;
+  padding: 0 16px 10px;
+}
+
+.topbar__tools {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  color: inherit;
+  text-decoration: none;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.brand__mark {
+  font-family: var(--pl-font-display);
+  font-weight: 750;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  color: var(--pl-text);
+}
+
+.brand__by {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--pl-text-muted);
+  white-space: nowrap;
+}
+
+/* ------- nav + content + ask (phone) ------- */
+.shell__nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 35;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: var(--pl-surface);
+}
+
+.shell__ask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--pl-nav-h) + env(safe-area-inset-bottom, 0px));
+  z-index: 34;
+}
+
+.shell__content {
+  min-width: 0;
+  /* room for the Ask bar + tabs */
+  padding-bottom: calc(var(--pl-nav-h) + var(--pl-ask-h) + 56px);
+}
+
+/* ------- desktop: left rail ------- */
+@media (min-width: 768px) {
+  .shell {
+    grid-template-columns: var(--pl-rail-w) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+  }
+  .topbar {
+    grid-column: 1 / -1;
+  }
+  .topbar__row {
+    padding: 0 20px 0 24px;
+  }
+  .topbar__row--range {
+    padding: 0 24px 12px;
+  }
+  .brand__mark {
+    font-size: 24px;
+  }
+  .shell__nav {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    padding-bottom: 0;
+    background: transparent;
+    grid-column: 1;
+    height: fit-content;
+  }
+  .shell__content {
+    grid-column: 2;
+    padding-bottom: calc(var(--pl-ask-h) + 56px);
+  }
+  .shell__ask {
+    left: var(--pl-rail-w);
+    bottom: 0;
+  }
+}
+
+@media (min-width: 1120px) {
+  .topbar__row {
+    padding: 0 32px 0 40px;
+  }
+  .topbar__row--range {
+    padding: 0 40px 12px;
+  }
+}

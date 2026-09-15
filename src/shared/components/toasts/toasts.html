@@ -1,0 +1,24 @@
+<div class="toasts" aria-live="polite">
+  @for (t of notifications.toasts(); track t.id) {
+    <div
+      class="toast"
+      [class]="'toast toast--' + t.severity"
+      [attr.role]="t.severity === 'error' ? 'alert' : 'status'"
+    >
+      <div class="toast__body">
+        <strong class="toast__summary">{{ t.summary }}</strong>
+        @if (t.detail) {
+          <span class="toast__detail">{{ t.detail }}</span>
+        }
+      </div>
+      <button
+        type="button"
+        class="toast__close"
+        (click)="notifications.remove(t.id)"
+        aria-label="Dismiss"
+      >
+        ×
+      </button>
+    </div>
+  }
+</div>

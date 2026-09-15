@@ -1,0 +1,50 @@
+<div class="pl-page deploys">
+  <header class="pl-page-head">
+    <div>
+      <h1 class="pl-page-title">Deploys</h1>
+      <p class="pl-note">Every deploy across every repo — the release log.</p>
+    </div>
+  </header>
+
+  <div class="filters" role="group" aria-label="Filter by project">
+    <button
+      type="button"
+      class="pl-chip-btn"
+      [attr.aria-pressed]="deploys.projectId() === null"
+      (click)="setFilter(null)"
+    >
+      All
+    </button>
+    @for (p of projects.activeProjects(); track p.id) {
+      <button
+        type="button"
+        class="pl-chip-btn"
+        [attr.aria-pressed]="deploys.projectId() === p.id"
+        (click)="setFilter(p.id)"
+      >
+        {{ p.name }}
+      </button>
+    }
+  </div>
+
+  @if (deploys.error(); as e) {
+    <div class="pl-result pl-result--failed" role="alert">
+      <span>{{ e }}</span>
+      <button type="button" class="pl-btn pl-btn--sm" (click)="deploys.load(deploys.projectId())">
+        Retry
+      </button>
+    </div>
+  }
+
+  <section class="pl-card" [attr.aria-busy]="deploys.loading()">
+    @if (deploys.initialLoading()) {
+      <div class="pl-skeleton deploys__skeleton" aria-hidden="true"></div>
+    } @else {
+      <pl-deploy-list
+        [deploys]="deploys.items()"
+        [projectNames]="projectNames()"
+        emptyText="No deploys recorded yet. Netlify, Cloud Run and GitHub webhooks feed this list."
+      />
+    }
+  </section>
+</div>

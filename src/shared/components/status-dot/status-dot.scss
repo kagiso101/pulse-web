@@ -1,0 +1,10 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-dot__label {
+  font-size: 13px;
+  color: var(--pl-text-soft);
+}

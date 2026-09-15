@@ -1,0 +1,114 @@
+/* ============================================================
+   Pulse tokens — Bookvas CI, DARK variant (PULSE-SPEC §0 Design,
+   PULSE-CONTRACT §8). Prefix `--pl-`.
+
+   Porcelain text on near-black. Lacquer green = good / brand.
+   Coral = something needs you — it appears ONLY for problems.
+   JetBrains Mono for EVERY number (.pl-num).
+   Phone-first: base styles target 390px.
+   ============================================================ */
+
+:root {
+  color-scheme: dark;
+
+  /* canvas */
+  --pl-bg: #0f1211;
+  --pl-surface: #161a18;
+  --pl-surface-2: #1d2220;
+  --pl-border: rgba(247, 244, 239, 0.1);
+  --pl-border-subtle: rgba(247, 244, 239, 0.06);
+
+  /* porcelain ink on dark */
+  --pl-text: #f7f4ef;
+  --pl-text-soft: #b8bdb9;
+  --pl-text-muted: #7e857f;
+
+  /* lacquer green — fills */
+  --pl-green: #0e5a45;
+  --pl-green-bright: #12735a;
+  --pl-green-tint: rgba(14, 90, 69, 0.18);
+  /* green as TEXT/dots on the dark canvas needs more luminance to stay legible (≈7:1) */
+  --pl-green-text: #4cb08c;
+
+  /* problems only */
+  --pl-coral: #e0553b;
+  --pl-coral-tint: rgba(224, 85, 59, 0.14);
+  --pl-amber: #c98a2d;
+  --pl-amber-tint: rgba(201, 138, 45, 0.14);
+
+  /* type */
+  --pl-font-display: 'Bricolage Grotesque', 'Instrument Sans', system-ui, sans-serif;
+  --pl-font-body: 'Instrument Sans', -apple-system, 'Segoe UI', sans-serif;
+  --pl-font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+
+  /* shape */
+  --pl-radius-sm: 8px;
+  --pl-radius-md: 12px;
+  --pl-radius-lg: 16px;
+  --pl-radius-pill: 999px;
+
+  /* spacing */
+  --pl-space-xs: 4px;
+  --pl-space-sm: 8px;
+  --pl-space-md: 16px;
+  --pl-space-lg: 24px;
+  --pl-space-xl: 40px;
+
+  /* layout */
+  --pl-touch: 44px;
+  --pl-topbar-h: 52px;
+  --pl-nav-h: 60px;
+  --pl-ask-h: 64px;
+  --pl-rail-w: 200px;
+  --pl-max-w: 1280px;
+
+  /* motion + focus */
+  --pl-transition: all 0.2s ease;
+  --pl-focus: 0 0 0 2px var(--pl-bg), 0 0 0 4px var(--pl-green-text);
+  --pl-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+/* ------------------------------------------------------------
+   Type scale
+   ------------------------------------------------------------ */
+.pl-display-lg,
+.pl-display-md,
+.pl-display-sm {
+  font-family: var(--pl-font-display);
+  color: var(--pl-text);
+  margin: 0;
+  letter-spacing: normal;
+}
+.pl-display-lg {
+  font-weight: 700;
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.06;
+}
+.pl-display-md {
+  font-weight: 650;
+  font-size: 22px;
+  line-height: 1.15;
+}
+.pl-display-sm {
+  font-weight: 650;
+  font-size: 17px;
+  line-height: 1.25;
+}
+
+.pl-body {
+  font-family: var(--pl-font-body);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.pl-body-sm {
+  font-family: var(--pl-font-body);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* EVERY number on screen */
+.pl-num {
+  font-family: var(--pl-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}

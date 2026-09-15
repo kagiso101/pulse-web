@@ -1,0 +1,14 @@
+<div class="range" role="radiogroup" aria-label="Time range">
+  @for (r of ranges; track r) {
+    <button
+      type="button"
+      class="range__btn"
+      role="radio"
+      [attr.aria-checked]="shell.range() === r"
+      [class.range__btn--active]="shell.range() === r"
+      (click)="shell.setRange(r)"
+    >
+      {{ labels[r] }}
+    </button>
+  }
+</div>

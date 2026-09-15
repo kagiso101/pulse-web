@@ -1,0 +1,16 @@
+@if (bars().length === 0) {
+  <p class="pl-empty">No monthly totals yet.</p>
+} @else {
+  <ol class="trend" role="list">
+    @for (b of bars(); track b.month) {
+      <li class="trend__col" [class.trend__col--active]="b.active" [title]="b.title">
+        <span class="trend__amount pl-num">{{ b.amount }}</span>
+        <span class="trend__track"
+          ><span class="trend__bar" [style.height.%]="b.height"></span
+        ></span>
+        <span class="trend__label pl-num">{{ b.label }}</span>
+        <span class="sr-only">{{ b.title }}</span>
+      </li>
+    }
+  </ol>
+}

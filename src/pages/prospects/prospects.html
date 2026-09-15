@@ -1,0 +1,269 @@
+<div class="pl-page prospects">
+  <header class="pl-page-head">
+    <div>
+      <h1 class="pl-page-title">Prospects</h1>
+      <p class="pl-note">
+        <span class="pl-num">{{ prospects.items().length }}</span> in the pipeline ·
+        <span class="pl-num" [class.pl-coral]="prospects.overdueCount() > 0">{{
+          prospects.overdueCount()
+        }}</span>
+        overdue
+      </p>
+    </div>
+    <div class="pl-row">
+      <label class="pl-btn pl-btn--sm" [class.is-busy]="prospects.importing()">
+        <lucide-icon [img]="icons.upload" [size]="16" aria-hidden="true" />
+        {{ prospects.importing() ? 'Importing…' : 'Import CSV' }}
+        <input
+          type="file"
+          accept=".csv,text/csv"
+          class="sr-only"
+          (change)="onFile($event)"
+          [disabled]="prospects.importing()"
+        />
+      </label>
+      <button
+        type="button"
+        class="pl-btn pl-btn--primary pl-btn--sm"
+        (click)="showAdd.set(!showAdd())"
+        [attr.aria-expanded]="showAdd()"
+      >
+        <lucide-icon [img]="icons.plus" [size]="16" aria-hidden="true" />
+        Add prospect
+      </button>
+    </div>
+  </header>
+
+  @if (prospects.importResult(); as r) {
+    <section class="pl-card import" role="status">
+      <div class="pl-card-head">
+        <h2 class="pl-section-title">CSV import</h2>
+        <button
+          type="button"
+          class="pl-btn pl-btn--ghost pl-btn--sm"
+          (click)="prospects.clearImportResult()"
+        >
+          Dismiss
+        </button>
+      </div>
+      <p>
+        <span class="pl-num">{{ r.imported }}</span> imported ·
+        <span class="pl-num">{{ r.skipped }}</span> skipped
+        @if (r.errors.length) {
+          ·
+          <span class="pl-coral"
+            ><span class="pl-num">{{ r.errors.length }}</span> error{{
+              r.errors.length === 1 ? '' : 's'
+            }}</span
+          >
+        }
+      </p>
+      @if (r.errors.length) {
+        <ul class="import__errors">
+          @for (e of r.errors; track $index) {
+            <li class="pl-note pl-note--coral">{{ e }}</li>
+          }
+        </ul>
+      }
+    </section>
+  }
+
+  @if (showAdd()) {
+    <form class="pl-card add" [formGroup]="addForm" (ngSubmit)="submitAdd()">
+      <div class="pl-card-head">
+        <h2 class="pl-section-title">New prospect</h2>
+      </div>
+      <div class="pl-form-grid">
+        <label class="pl-field"
+          ><span>Name *</span
+          ><input class="pl-input" formControlName="name" autocomplete="off" required
+        /></label>
+        <label class="pl-field"
+          ><span>Business</span><input class="pl-input" formControlName="business"
+        /></label>
+        <label class="pl-field"
+          ><span>Phone</span><input class="pl-input pl-num" formControlName="phone" inputmode="tel"
+        /></label>
+        <label class="pl-field"
+          ><span>Area</span><input class="pl-input" formControlName="area"
+        /></label>
+        <label class="pl-field">
+          <span>Has a website?</span>
+          <select class="pl-select" formControlName="hasWebsite">
+            <option value="">Unknown</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </label>
+        <label class="pl-field">
+          <span>Status</span>
+          <select class="pl-select" formControlName="status">
+            @for (s of statuses; track s) {
+              <option [value]="s">{{ labels[s] }}</option>
+            }
+          </select>
+        </label>
+        <label class="pl-field"
+          ><span>Next action</span><input class="pl-input" formControlName="nextAction"
+        /></label>
+        <label class="pl-field"
+          ><span>Next action date</span
+          ><input class="pl-input pl-num" type="date" formControlName="nextActionDate"
+        /></label>
+        <label class="pl-field add__notes"
+          ><span>Notes</span><textarea class="pl-textarea" formControlName="notes"></textarea>
+        </label>
+      </div>
+      @if (addForm.controls.name.touched && addForm.controls.name.invalid) {
+        <p class="pl-note pl-note--coral">A name is required.</p>
+      }
+      <div class="pl-row add__actions">
+        <button type="button" class="pl-btn" (click)="showAdd.set(false)">Cancel</button>
+        <button type="submit" class="pl-btn pl-btn--primary" [disabled]="prospects.creating()">
+          {{ prospects.creating() ? 'Adding…' : 'Add prospect' }}
+        </button>
+      </div>
+    </form>
+  }
+
+  <div class="filters" role="group" aria-label="Filter by status">
+    <button
+      type="button"
+      class="pl-chip-btn"
+      [attr.aria-pressed]="prospects.statusFilter() === null"
+      (click)="prospects.setStatusFilter(null)"
+    >
+      All <span class="pl-num">{{ prospects.items().length }}</span>
+    </button>
+    @for (s of statuses; track s) {
+      <button
+        type="button"
+        class="pl-chip-btn"
+        [attr.aria-pressed]="prospects.statusFilter() === s"
+        (click)="prospects.setStatusFilter(s)"
+      >
+        {{ labels[s] }} <span class="pl-num">{{ prospects.countsByStatus()[s] }}</span>
+      </button>
+    }
+  </div>
+
+  @if (prospects.error(); as e) {
+    <div class="pl-result pl-result--failed" role="alert">
+      <span>{{ e }}</span>
+      <button type="button" class="pl-btn pl-btn--sm" (click)="prospects.load()">Retry</button>
+    </div>
+  }
+
+  @if (prospects.loading() && !prospects.loaded()) {
+    @for (i of [1, 2, 3]; track i) {
+      <div class="pl-skeleton list__skeleton" aria-hidden="true"></div>
+    }
+  } @else if (prospects.filtered().length === 0) {
+    <p class="pl-card pl-empty">
+      {{ prospects.statusFilter() ? 'No prospects with this status.' : 'No prospects yet.' }}
+      Import the CSV or add one.
+    </p>
+  } @else {
+    <div class="table-head" aria-hidden="true">
+      <span>Prospect</span><span>Status</span><span>Next action</span><span>Date</span
+      ><span>Latest note</span><span></span>
+    </div>
+    <ul class="list">
+      @for (p of prospects.filtered(); track p.id) {
+        <li class="row pl-card" [class.row--overdue]="p.overdue" [attr.aria-busy]="isSaving(p.id)">
+          <div class="row__who">
+            <div class="row__name-line">
+              <strong class="row__name">{{ p.name }}</strong>
+              @if (p.overdue) {
+                <span class="pl-chip pl-chip--coral">Overdue</span>
+              }
+            </div>
+            @if (p.business) {
+              <span class="row__biz">{{ p.business }}</span>
+            }
+            <span class="row__meta pl-note">
+              @if (p.area) {
+                <span>{{ p.area }}</span>
+              }
+              @if (p.phone) {
+                <span>
+                  · <a [href]="'tel:' + p.phone" class="pl-num">{{ p.phone }}</a></span
+                >
+              }
+              @if (p.hasWebsite !== null) {
+                <span> · {{ p.hasWebsite ? 'has a website' : 'no website' }}</span>
+              }
+            </span>
+          </div>
+
+          <div class="row__status">
+            <label class="sr-only" [for]="'status-' + p.id">Status for {{ p.name }}</label>
+            <select
+              class="pl-select pl-select--sm"
+              [id]="'status-' + p.id"
+              (change)="onStatus(p, $event)"
+              [disabled]="isSaving(p.id)"
+            >
+              @for (s of statuses; track s) {
+                <option [value]="s" [selected]="s === p.status">{{ labels[s] }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="row__next">
+            <label class="sr-only" [for]="'next-' + p.id">Next action for {{ p.name }}</label>
+            <input
+              class="pl-input pl-input--sm"
+              [id]="'next-' + p.id"
+              type="text"
+              placeholder="Next action"
+              [value]="p.nextAction ?? ''"
+              (change)="onNextAction(p, $event)"
+              [disabled]="isSaving(p.id)"
+            />
+          </div>
+
+          <div class="row__date">
+            <label class="sr-only" [for]="'date-' + p.id">Next action date for {{ p.name }}</label>
+            <input
+              class="pl-input pl-input--sm pl-num"
+              [id]="'date-' + p.id"
+              type="date"
+              [value]="p.nextActionDate ?? ''"
+              (change)="onNextActionDate(p, $event)"
+              [disabled]="isSaving(p.id)"
+            />
+          </div>
+
+          <div class="row__notes">
+            @if (notesPreview(p); as n) {
+              <p class="row__note" [title]="p.notes ?? ''">{{ n }}</p>
+            } @else {
+              <p class="row__note pl-muted">No notes yet</p>
+            }
+          </div>
+
+          <div class="row__actions">
+            <button
+              type="button"
+              class="pl-btn pl-btn--sm"
+              (click)="addNote(p)"
+              [disabled]="isSaving(p.id)"
+            >
+              Add note
+            </button>
+            <button
+              type="button"
+              class="pl-btn pl-btn--ghost pl-btn--sm pl-btn--icon"
+              (click)="remove(p)"
+              [disabled]="isSaving(p.id)"
+              [attr.aria-label]="'Remove ' + p.name"
+            >
+              <lucide-icon [img]="icons.trash" [size]="16" aria-hidden="true" />
+            </button>
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</div>

@@ -1,0 +1,150 @@
+.is-busy {
+  opacity: 0.6;
+}
+
+.import__errors {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 4px;
+}
+
+.add__notes {
+  grid-column: 1 / -1;
+}
+
+.add__actions {
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.filters {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  .pl-chip-btn {
+    flex: none;
+    .pl-num {
+      margin-left: 4px;
+      color: var(--pl-text-muted);
+    }
+  }
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.list__skeleton {
+  height: 120px;
+  border-radius: var(--pl-radius-lg);
+}
+
+.table-head {
+  display: none;
+}
+
+/* phone: card per prospect */
+.row {
+  display: grid;
+  gap: 10px;
+  border-left: 3px solid transparent;
+  &[aria-busy='true'] {
+    opacity: 0.7;
+  }
+}
+.row--overdue {
+  border-left-color: var(--pl-coral);
+}
+
+.row__who {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.row__name-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.row__name {
+  font-size: 15px;
+}
+
+.row__biz {
+  font-size: 14px;
+  color: var(--pl-text-soft);
+}
+
+.row__meta {
+  font-size: 12px;
+}
+
+.row__note {
+  font-size: 13px;
+  color: var(--pl-text-soft);
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row__actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+@media (min-width: 768px) {
+  .row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .row__who,
+  .row__notes,
+  .row__actions {
+    grid-column: 1 / -1;
+  }
+}
+
+/* desktop: table-like rows */
+@media (min-width: 1120px) {
+  .list {
+    gap: 4px;
+  }
+  .table-head,
+  .row {
+    display: grid;
+    grid-template-columns: 1.7fr 1fr 1.4fr 1fr 1.6fr auto;
+    align-items: center;
+    gap: 12px;
+  }
+  .table-head {
+    padding: 0 14px 4px 17px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--pl-text-muted);
+  }
+  .row {
+    padding: 10px 14px;
+    border-radius: var(--pl-radius-sm);
+  }
+  .row__who,
+  .row__notes,
+  .row__actions {
+    grid-column: auto;
+  }
+}

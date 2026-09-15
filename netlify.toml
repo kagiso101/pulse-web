@@ -1,0 +1,39 @@
+[build]
+  command = "npm run build"
+  # Coupled to the angular.json project name ("pulse-web"). Renaming the Angular project
+  # breaks the deploy.
+  publish = "dist/pulse-web/browser"
+
+[build.environment]
+  NODE_VERSION = "24"
+
+# Branch deploys of `development` are the SIT frontend: the same optimised production build
+# with the SIT environment file swapped in (pulse-api-sit). Production deploys of `main` are
+# untouched.
+[context.branch-deploy]
+  command = "npm run build:sit"
+
+# Angular SPA: route everything to index.html so deep links (/p/bookvas, /view/<token>) work.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# IMPORTANT: script-src without 'unsafe-inline' blocks inline event handlers. Angular's
+# inlineCritical optimisation emits <link ... media="print" onload="this.media='all'">, whose
+# onload this CSP kills — the global stylesheet would then apply to PRINT ONLY and the app
+# loses its theme (same lesson as Bookvas). inlineCritical is pinned OFF in angular.json for
+# production AND sit; never re-enable it under this CSP.
+#
+# Google Identity Services needs accounts.google.com/gsi/ in script-src, style-src,
+# connect-src and frame-src (contract §8). Fonts come from Google Fonts. Everything else is
+# 'self' + the two pulse-api Cloud Run URLs.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self' https://accounts.google.com/gsi/client; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com/gsi/style; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://pulse-api-898880840502.africa-south1.run.app https://pulse-api-sit-898880840502.africa-south1.run.app https://accounts.google.com/gsi/; frame-src https://accounts.google.com/gsi/; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "no-referrer"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    X-Content-Type-Options = "nosniff"
+    X-Robots-Tag = "noindex, nofollow"

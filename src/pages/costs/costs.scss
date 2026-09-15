@@ -1,0 +1,61 @@
+.costs__month {
+  min-width: 160px;
+}
+
+.costs__skeleton {
+  height: 96px;
+  border-radius: var(--pl-radius-lg);
+}
+
+.costs__hero {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.providers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+
+.provider {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid var(--pl-border-subtle);
+  font-size: 14px;
+  &:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+}
+
+.provider__name {
+  font-weight: 500;
+}
+
+.provider__amount {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.manual__lede {
+  margin-bottom: 12px;
+}
+
+.manual__submit {
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+@media (min-width: 768px) {
+  .costs__hero {
+    grid-template-columns: minmax(0, 360px);
+  }
+  .manual__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

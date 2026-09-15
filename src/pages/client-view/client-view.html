@@ -1,0 +1,76 @@
+<main class="client">
+  <header class="client__brand">
+    <span class="client__mark">Pulse</span>
+  </header>
+
+  @switch (state().status) {
+    @case ('loading') {
+      <div class="pl-skeleton client__skeleton" aria-hidden="true"></div>
+    }
+    @case ('notfound') {
+      <section class="pl-card client__card client__message">
+        <h1 class="pl-display-md">This link is no longer valid.</h1>
+        <p class="pl-note">
+          It may have been replaced or revoked. Ask ROGUETECHNOLOGIES for a fresh one.
+        </p>
+      </section>
+    }
+    @case ('error') {
+      <section class="pl-card client__card client__message" role="alert">
+        <h1 class="pl-display-md">Couldn't load this view.</h1>
+        @if (state(); as s) {
+          @if (s.status === 'error') {
+            <p class="pl-note">{{ s.message }}</p>
+          }
+        }
+      </section>
+    }
+    @case ('ok') {
+      @if (view(); as v) {
+        <section class="pl-card client__card">
+          <div class="client__head">
+            <div>
+              <h1 class="pl-display-md">{{ v.name }}</h1>
+              @if (v.siteUrl) {
+                <a [href]="v.siteUrl" target="_blank" rel="noopener" class="client__site">{{
+                  hostOf(v.siteUrl)
+                }}</a>
+              }
+            </div>
+            <pl-status-dot [state]="v.status" [showLabel]="true" />
+          </div>
+
+          <dl class="client__facts">
+            <div>
+              <dt>Uptime · 30 days</dt>
+              <dd class="pl-num" [class.pl-coral]="(v.uptimePct30d ?? 100) < 99">{{ uptime() }}</dd>
+            </div>
+            <div>
+              <dt>As of</dt>
+              <dd class="pl-num">{{ generatedAt() }}</dd>
+            </div>
+          </dl>
+
+          @if (v.traffic; as t) {
+            <div class="client__traffic">
+              <h2 class="pl-label">Visitors</h2>
+              <pl-traffic-chart [series]="t.series" [compact]="true" />
+            </div>
+            <pl-ranked-list
+              title="Top pages"
+              [rows]="topPages()"
+              valueLabel="views"
+              emptyText="No page views recorded yet."
+            />
+          } @else {
+            <p class="pl-note">Traffic reporting is not connected for this site yet.</p>
+          }
+        </section>
+      }
+    }
+  }
+
+  <footer class="client__foot">
+    Powered by <span class="client__foot-brand">ROGUETECHNOLOGIES</span>
+  </footer>
+</main>

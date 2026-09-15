@@ -1,0 +1,114 @@
+:host {
+  display: block;
+}
+
+.chart {
+  display: grid;
+  gap: 8px;
+}
+
+.chart__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  font-size: 13px;
+  color: var(--pl-text-soft);
+  b {
+    font-weight: 600;
+    color: var(--pl-text);
+    margin-left: 4px;
+  }
+}
+
+.chart__key {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chart__swatch {
+  display: inline-block;
+  width: 12px;
+  height: 3px;
+  border-radius: 2px;
+}
+.chart__swatch--users {
+  background: var(--pl-green-text);
+}
+.chart__swatch--sessions {
+  background: var(--pl-text-muted);
+}
+
+.chart__body {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+  height: 160px;
+}
+.chart--compact .chart__body {
+  height: 110px;
+}
+
+.chart__y {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: 11px;
+  color: var(--pl-text-muted);
+  line-height: 1;
+  padding: 2px 0;
+}
+
+.chart__plot {
+  position: relative;
+  min-width: 0;
+  border-left: 1px solid var(--pl-border-subtle);
+  border-bottom: 1px solid var(--pl-border-subtle);
+  svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+  }
+}
+
+.chart__grid {
+  stroke: var(--pl-border-subtle);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.chart__area {
+  fill: var(--pl-green-tint);
+}
+
+.chart__line {
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.chart__line--users {
+  stroke: var(--pl-green-text);
+}
+.chart__line--sessions {
+  stroke: var(--pl-text-muted);
+  stroke-width: 1.2;
+}
+
+.chart__empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+}
+
+.chart__x {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 34px;
+  font-size: 11px;
+  color: var(--pl-text-muted);
+}

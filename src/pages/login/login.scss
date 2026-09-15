@@ -1,0 +1,67 @@
+.login {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+}
+
+.login__card {
+  width: 100%;
+  max-width: 400px;
+  display: grid;
+  gap: 14px;
+  padding: 28px 24px;
+  border-color: var(--pl-border);
+  animation: pl-fade-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.login__title {
+  font-family: var(--pl-font-display);
+  font-weight: 750;
+  font-size: 40px;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.login__lede {
+  color: var(--pl-text-soft);
+  font-size: 15px;
+}
+
+.login__button {
+  display: grid;
+  min-height: 44px;
+  margin-top: 6px;
+}
+
+.login__gsi {
+  display: flex;
+  justify-content: center;
+  min-height: 44px;
+}
+
+.login__skeleton {
+  width: 320px;
+  max-width: 100%;
+  height: 44px;
+  border-radius: var(--pl-radius-pill);
+  justify-self: center;
+}
+
+.login__status {
+  text-align: center;
+}
+
+.login__dev {
+  flex-direction: column;
+  gap: 4px;
+  code {
+    font-family: var(--pl-font-mono);
+    font-size: 12px;
+  }
+}
+
+.login__foot {
+  text-align: center;
+  margin-top: 6px;
+}

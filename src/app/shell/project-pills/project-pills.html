@@ -1,0 +1,32 @@
+<nav class="pills" aria-label="Projects">
+  <a
+    class="pill"
+    routerLink="/"
+    [class.pill--active]="shell.selectedSlug() === null"
+    [attr.aria-current]="shell.selectedSlug() === null ? 'page' : null"
+  >
+    All
+  </a>
+  @for (p of projects.activeProjects(); track p.id) {
+    <a
+      class="pill"
+      [routerLink]="['/p', p.slug]"
+      [class.pill--active]="shell.selectedSlug() === p.slug"
+      [attr.aria-current]="shell.selectedSlug() === p.slug ? 'page' : null"
+    >
+      {{ p.name }}
+      @if (p.status.openAlerts > 0) {
+        <span
+          class="pill__alert"
+          role="img"
+          [attr.aria-label]="alertsLabel(p.status.openAlerts)"
+        ></span>
+      }
+    </a>
+  }
+  @if (projects.loaded() && projects.activeProjects().length === 0) {
+    <span class="pills__empty pl-muted"
+      >No projects in the registry yet — add one in Settings.</span
+    >
+  }
+</nav>

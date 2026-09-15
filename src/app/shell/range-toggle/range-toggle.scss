@@ -1,0 +1,31 @@
+:host {
+  display: inline-block;
+}
+
+.range {
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+  border-radius: var(--pl-radius-pill);
+  background: var(--pl-surface);
+  border: 1px solid var(--pl-border-subtle);
+}
+
+.range__btn {
+  min-height: 34px;
+  min-width: 56px;
+  padding: 0 14px;
+  border-radius: var(--pl-radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pl-text-muted);
+  transition: var(--pl-transition);
+  &:hover {
+    color: var(--pl-text);
+  }
+}
+
+.range__btn--active {
+  background: var(--pl-green);
+  color: var(--pl-text);
+}

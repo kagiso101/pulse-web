@@ -1,0 +1,56 @@
+<div class="bell" (keydown)="onKeydown($event)">
+  <button
+    type="button"
+    class="pl-btn pl-btn--ghost pl-btn--icon bell__btn"
+    (click)="notices.togglePanel()"
+    [attr.aria-label]="label()"
+    [attr.aria-expanded]="notices.panelOpen()"
+    aria-haspopup="dialog"
+  >
+    <lucide-icon [img]="icons.bell" [size]="18" aria-hidden="true" />
+    @if (notices.unreadCount() > 0) {
+      <span class="bell__count pl-num" aria-hidden="true">{{ notices.unreadCount() }}</span>
+    }
+  </button>
+
+  @if (notices.panelOpen()) {
+    <div class="bell__backdrop" (click)="notices.setPanelOpen(false)"></div>
+    <div class="bell__panel pl-card" role="dialog" aria-label="Notices">
+      <div class="pl-card-head">
+        <h2 class="pl-section-title">Notices</h2>
+        <button
+          type="button"
+          class="pl-btn pl-btn--ghost pl-btn--sm"
+          (click)="notices.setPanelOpen(false)"
+        >
+          Close
+        </button>
+      </div>
+      @if (rows().length === 0) {
+        <p class="pl-empty">No unread notices.</p>
+      } @else {
+        <ul class="bell__list">
+          @for (n of rows(); track n.id) {
+            <li class="notice">
+              <div class="notice__head">
+                <strong class="notice__title">{{ n.title }}</strong>
+                <span class="notice__when pl-num">{{ n.when }}</span>
+              </div>
+              <p class="notice__body">{{ n.body }}</p>
+              <div class="notice__actions">
+                @if (n.href) {
+                  <button type="button" class="pl-btn pl-btn--primary pl-btn--sm" (click)="open(n)">
+                    Open
+                  </button>
+                }
+                <button type="button" class="pl-btn pl-btn--sm" (click)="notices.markRead(n.id)">
+                  Mark read
+                </button>
+              </div>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,44 @@
+<section class="pl-card funnel" aria-labelledby="funnel-title">
+  <div class="pl-card-head">
+    <h3 class="pl-section-title" id="funnel-title">Booking funnel</h3>
+    @if (funnel().stale) {
+      <span class="pl-chip pl-chip--amber">Stale</span>
+    }
+  </div>
+
+  <ol class="funnel__list">
+    @for (row of rows(); track row.event) {
+      @if (row.dropoff !== null) {
+        <li class="funnel__drop" [class.funnel__drop--alarm]="row.alarm" aria-live="off">
+          <span class="pl-num">{{ row.dropoffDisplay }}</span>
+          <span class="funnel__drop-label">{{
+            row.alarm ? 'drop-off — needs a look' : 'drop-off'
+          }}</span>
+        </li>
+      }
+      <li class="funnel__step">
+        <div class="funnel__meta">
+          <span class="funnel__label">{{ row.label }}</span>
+          <span class="funnel__count pl-num" [class.pl-muted]="row.count === null">{{
+            row.countDisplay
+          }}</span>
+        </div>
+        <div
+          class="funnel__track"
+          role="img"
+          [attr.aria-label]="row.label + ': ' + row.countDisplay"
+        >
+          <div
+            class="funnel__bar"
+            [style.width.%]="row.width"
+            [class.funnel__bar--empty]="row.count === null"
+          ></div>
+        </div>
+      </li>
+    }
+  </ol>
+
+  @if (funnel().stale || funnel().note) {
+    <p class="pl-note pl-note--amber funnel__note">{{ noteText() }}</p>
+  }
+</section>

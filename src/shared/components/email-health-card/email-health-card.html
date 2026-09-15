@@ -1,0 +1,48 @@
+<section class="pl-card email" [class.pl-card--coral]="alarm()">
+  <div class="pl-card-head">
+    <h3 class="pl-section-title">Email</h3>
+    @if (view(); as v) {
+      <span
+        class="pl-chip"
+        [class.pl-chip--green]="v.smtpConfigured"
+        [class.pl-chip--muted]="!v.smtpConfigured"
+      >
+        {{ v.smtpConfigured ? 'SMTP configured' : 'SMTP not configured' }}
+      </span>
+    }
+  </div>
+
+  @if (view(); as v) {
+    <dl class="email__grid">
+      <div>
+        <dt>Last 24 h</dt>
+        <dd>
+          <span class="pl-num">{{ v.sent24h }}</span> sent
+        </dd>
+        <dd [class.pl-coral]="alarm()">
+          <span class="pl-num">{{ v.failed24h }}</span> failed
+        </dd>
+      </div>
+      <div>
+        <dt>Last 7 d</dt>
+        <dd>
+          <span class="pl-num">{{ v.sent7d }}</span> sent
+        </dd>
+        <dd [class.pl-amber]="(health()?.failed7d ?? 0) > 0">
+          <span class="pl-num">{{ v.failed7d }}</span> failed
+        </dd>
+      </div>
+      <div>
+        <dt>Last sent</dt>
+        <dd class="pl-num">{{ v.lastSent }}</dd>
+      </div>
+    </dl>
+    @if (alarm()) {
+      <p class="pl-note pl-note--coral email__note">
+        Emails failed in the last day — check Brevo and the Bookvas operations diary.
+      </p>
+    }
+  } @else {
+    <p class="pl-empty">Email health not reported yet.</p>
+  }
+</section>

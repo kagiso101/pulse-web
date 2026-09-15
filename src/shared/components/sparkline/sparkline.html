@@ -1,0 +1,21 @@
+<svg
+  class="sparkline"
+  [attr.viewBox]="viewBox"
+  preserveAspectRatio="none"
+  role="img"
+  [attr.aria-label]="ariaLabel()"
+>
+  @if (isEmpty()) {
+    <line
+      x1="2"
+      y1="16"
+      x2="98"
+      y2="16"
+      class="sparkline__empty"
+      vector-effect="non-scaling-stroke"
+    />
+  } @else {
+    <path [attr.d]="areaPath()" class="sparkline__area" />
+    <path [attr.d]="linePath()" class="sparkline__line" vector-effect="non-scaling-stroke" />
+  }
+</svg>

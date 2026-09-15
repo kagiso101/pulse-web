@@ -1,0 +1,32 @@
+<section class="pl-card events">
+  <div class="pl-card-head">
+    <h3 class="pl-section-title">Platform events</h3>
+    <span class="pl-label">latest {{ rows().length }}</span>
+  </div>
+  @if (rows().length === 0) {
+    <p class="pl-empty">Nothing happened on Bookvas in this range.</p>
+  } @else {
+    <ol class="events__list">
+      @for (e of rows(); track e.id) {
+        <li class="event" [class.event--resolved]="!!e.resolvedAt">
+          <div class="event__line">
+            <span class="pl-chip" [class]="'pl-chip pl-chip--' + e.tone">{{
+              e.severity.toLowerCase()
+            }}</span>
+            <span class="event__type">{{ e.typeLabel }}</span>
+            @if (e.tenantName) {
+              <span class="event__tenant">{{ e.tenantName }}</span>
+            }
+            <time class="event__when pl-num" [attr.datetime]="e.happenedAt">{{ e.when }}</time>
+          </div>
+          <p class="event__message">
+            {{ e.message }}
+            @if (e.resolvedAt) {
+              <span class="pl-chip pl-chip--green">resolved</span>
+            }
+          </p>
+        </li>
+      }
+    </ol>
+  }
+</section>

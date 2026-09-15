@@ -1,0 +1,81 @@
+<section class="pl-card tenants">
+  <div class="pl-card-head">
+    <h3 class="pl-section-title">Tenants</h3>
+    <span class="pl-label pl-num">{{ rows().length }}</span>
+  </div>
+
+  @if (rows().length === 0) {
+    <p class="pl-empty">No tenants yet.</p>
+  } @else {
+    <ul class="tenants__list">
+      @for (t of rows(); track t.tenantId) {
+        <li class="tenant">
+          <div class="tenant__main">
+            <div class="tenant__name">
+              @if (t.isFounder) {
+                <lucide-icon
+                  [img]="icons.star"
+                  [size]="14"
+                  class="tenant__star"
+                  aria-hidden="true"
+                />
+                <span class="sr-only">Founder.</span>
+              }
+              <span>{{ t.businessName }}</span>
+              <span class="tenant__slug pl-muted">/{{ t.slug }}</span>
+            </div>
+            <div class="tenant__chips">
+              @if (t.planCode) {
+                <span class="pl-chip">{{ t.planCode }}</span>
+              }
+              <span class="pl-chip" [class]="'pl-chip pl-chip--' + t.subTone">{{
+                t.subscriptionStatus ?? 'no subscription'
+              }}</span>
+              @if (t.status && t.status.toUpperCase() !== 'ACTIVE') {
+                <span class="pl-chip" [class]="'pl-chip pl-chip--' + t.tenantTone"
+                  >tenant {{ t.status.toLowerCase() }}</span
+                >
+              }
+              @if (t.graceDisplay) {
+                <span class="pl-chip pl-chip--amber"
+                  >grace until <span class="pl-num">{{ t.graceDisplay }}</span></span
+                >
+              }
+              <span class="tenant__since pl-muted"
+                >since <span class="pl-num">{{ t.since }}</span></span
+              >
+            </div>
+          </div>
+          <div class="tenant__actions">
+            <button
+              type="button"
+              class="pl-btn pl-btn--sm"
+              [disabled]="busy() || !t.canActOnSubscription"
+              (click)="extendGrace(t)"
+              [title]="t.canActOnSubscription ? '' : 'No subscription to act on'"
+            >
+              Extend grace +5d
+            </button>
+            <button
+              type="button"
+              class="pl-btn pl-btn--sm"
+              [disabled]="busy() || !t.canActOnSubscription"
+              (click)="comp(t)"
+              [title]="t.canActOnSubscription ? '' : 'No subscription to act on'"
+            >
+              Comp 30d
+            </button>
+            <button
+              type="button"
+              class="pl-btn pl-btn--sm"
+              [disabled]="busy()"
+              (click)="toggleFounder(t)"
+            >
+              {{ t.isFounder ? 'Remove founder' : 'Make founder' }}
+            </button>
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</section>

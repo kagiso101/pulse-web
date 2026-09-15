@@ -1,0 +1,128 @@
+<div class="pl-page all">
+  @if (overview.error(); as e) {
+    <div class="pl-result pl-result--failed all__error" role="alert">
+      <span>{{ e }}</span>
+      <button type="button" class="pl-btn pl-btn--sm" (click)="shell.refresh()">Retry</button>
+    </div>
+  }
+
+  @if (overview.summary(); as s) {
+    <section class="pl-card pl-card--quiet summary" aria-label="Daily summary">
+      <div class="pl-card-head">
+        <span class="pl-eyebrow">This morning</span>
+        <span class="pl-note pl-num">{{ summaryDate() }}</span>
+      </div>
+      <p class="summary__body">{{ s.body }}</p>
+    </section>
+  }
+
+  <section class="numbers" aria-label="Headline numbers">
+    @if (overview.initialLoading()) {
+      @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+        <div class="pl-skeleton numbers__skeleton" aria-hidden="true"></div>
+      }
+    } @else if (overview.headline(); as h) {
+      <pl-big-number
+        [label]="'Visitors · ' + rangeLabel()"
+        [value]="h.visitors"
+        caption="no GA4 data yet"
+      />
+      <pl-big-number
+        label="Bookings this week"
+        [value]="h.bookingsThisWeek"
+        [caption]="gapCaption"
+      />
+      <pl-big-number
+        label="Deposits this week"
+        [value]="h.depositsCents"
+        unit="cents"
+        [caption]="gapCaption"
+      />
+      <pl-big-number
+        label="Founder seats"
+        [value]="h.founderSeatsUsed"
+        [denominator]="h.founderSeatsTotal"
+        caption="waiting for Bookvas"
+      />
+      <pl-big-number
+        [label]="'CV downloads · ' + rangeLabel()"
+        [value]="h.cvDownloads"
+        caption="no GA4 data yet"
+      />
+      <pl-big-number
+        label="Sites up"
+        [value]="h.sitesUp"
+        [denominator]="h.sitesTotal"
+        [tone]="sitesTone()"
+      />
+    }
+  </section>
+
+  <section class="pl-section" aria-labelledby="projects-title">
+    <h2 class="pl-section-title" id="projects-title">Projects</h2>
+    @if (overview.initialLoading()) {
+      <div class="projects">
+        @for (i of [1, 2, 3]; track i) {
+          <div class="pl-skeleton projects__skeleton" aria-hidden="true"></div>
+        }
+      </div>
+    } @else if (overview.projects().length === 0) {
+      <p class="pl-card pl-empty">
+        No projects yet. Add one in <a routerLink="/settings">Settings</a>.
+      </p>
+    } @else {
+      <div class="projects">
+        @for (c of overview.projects(); track c.projectId) {
+          <pl-project-card [card]="c" />
+        }
+      </div>
+    }
+  </section>
+
+  <section class="pl-section" aria-labelledby="needs-title">
+    <h2 class="pl-section-title" id="needs-title">Needs you</h2>
+    @if (overview.initialLoading()) {
+      <div class="pl-skeleton needs__skeleton" aria-hidden="true"></div>
+    } @else if (needsYou().length === 0) {
+      <p class="pl-card pl-empty pl-empty--good">Nothing needs you. Go to work.</p>
+    } @else {
+      <ul class="needs">
+        @for (item of needsYou(); track item.type + item.id) {
+          <li class="need pl-card" [class.need--alert]="item.type === 'alert'">
+            <div class="need__main">
+              <span
+                class="pl-chip"
+                [class.pl-chip--coral]="item.type === 'alert'"
+                [class.pl-chip--amber]="item.type === 'prospect'"
+              >
+                {{ item.type === 'alert' ? 'Alert' : 'Prospect' }}
+              </span>
+              <strong class="need__title">{{ item.title }}</strong>
+              <span class="need__detail">{{ item.detail }}</span>
+              <span class="need__since pl-num">{{ item.sinceLabel }}</span>
+            </div>
+            <div class="need__actions">
+              @if (item.internal) {
+                <a class="pl-btn pl-btn--sm" [routerLink]="item.href">Open</a>
+              } @else {
+                <a class="pl-btn pl-btn--sm" [href]="item.href" target="_blank" rel="noopener"
+                  >Open</a
+                >
+              }
+              @if (item.type === 'alert') {
+                <button
+                  type="button"
+                  class="pl-btn pl-btn--primary pl-btn--sm"
+                  (click)="alerts.ack(item.id)"
+                  [disabled]="isAcking(item.id)"
+                >
+                  {{ isAcking(item.id) ? 'Acknowledging…' : 'Acknowledge' }}
+                </button>
+              }
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+</div>

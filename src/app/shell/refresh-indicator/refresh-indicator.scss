@@ -1,0 +1,31 @@
+:host {
+  display: inline-block;
+}
+
+.refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.refresh__text {
+  font-size: 12px;
+  color: var(--pl-text-muted);
+  white-space: nowrap;
+}
+
+.spin {
+  animation: pl-spin 0.9s linear infinite;
+}
+
+@keyframes pl-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 420px) {
+  .refresh__text {
+    display: none;
+  }
+}

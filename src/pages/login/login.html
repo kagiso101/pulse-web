@@ -1,0 +1,39 @@
+<main class="login">
+  <section class="login__card pl-card" aria-labelledby="login-title">
+    <span class="pl-eyebrow">ROGUETECHNOLOGIES</span>
+    <h1 class="login__title" id="login-title">Pulse</h1>
+    <p class="login__lede">Sign in with the allow-listed Google account.</p>
+
+    <div class="login__button" [attr.aria-busy]="auth.isAuthenticating()">
+      <div #gsi class="login__gsi" [hidden]="auth.googleClientIdMissing"></div>
+      @if (!buttonReady() && !auth.googleClientIdMissing && !scriptError()) {
+        <div class="pl-skeleton login__skeleton" aria-hidden="true"></div>
+      }
+    </div>
+
+    @if (auth.isAuthenticating()) {
+      <p class="pl-note login__status" role="status">Checking with Pulse…</p>
+    }
+
+    @if (auth.error(); as e) {
+      <p class="pl-result pl-result--failed" role="alert">{{ e }}</p>
+    }
+
+    @if (scriptError(); as e) {
+      <p class="pl-result pl-result--failed" role="alert">{{ e }}</p>
+    }
+
+    @if (auth.googleClientIdMissing) {
+      <p class="pl-result pl-result--failed login__dev" role="alert">
+        <strong>Developer note.</strong>
+        <span>
+          <code>googleClientId</code> in <code>src/environments/environment*.ts</code> is still the
+          placeholder. Create an OAuth client (README → Google OAuth client) and paste its client id
+          there — the Google button cannot render without it.
+        </span>
+      </p>
+    }
+
+    <p class="login__foot pl-note">One owner, one account. Nothing here is shared.</p>
+  </section>
+</main>

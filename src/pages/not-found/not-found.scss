@@ -1,0 +1,15 @@
+.nf {
+  min-height: 60dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+}
+
+.nf__card {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+  max-width: 400px;
+  width: 100%;
+  padding: 28px 24px;
+}

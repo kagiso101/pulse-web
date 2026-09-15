@@ -1,0 +1,37 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.email__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  dt {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--pl-text-muted);
+    margin-bottom: 2px;
+  }
+  dd {
+    margin: 0;
+    font-size: 14px;
+    color: var(--pl-text-soft);
+    .pl-num {
+      font-weight: 600;
+      color: var(--pl-text);
+    }
+    &.pl-coral .pl-num {
+      color: var(--pl-coral);
+    }
+    &.pl-amber .pl-num {
+      color: var(--pl-amber);
+    }
+  }
+}
+
+.email__note {
+  margin-top: 10px;
+}

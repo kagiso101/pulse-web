@@ -1,0 +1,71 @@
+:host {
+  display: block;
+}
+
+.funnel__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.funnel__step {
+  display: grid;
+  gap: 4px;
+}
+
+.funnel__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.funnel__label {
+  color: var(--pl-text-soft);
+}
+
+.funnel__count {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.funnel__track {
+  height: 14px;
+  border-radius: 7px;
+  background: var(--pl-surface-2);
+  overflow: hidden;
+}
+
+.funnel__bar {
+  height: 100%;
+  border-radius: 7px;
+  background: var(--pl-green);
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.funnel__bar--empty {
+  background: repeating-linear-gradient(90deg, var(--pl-border) 0 4px, transparent 4px 8px);
+  width: 100% !important;
+  opacity: 0.6;
+}
+
+.funnel__drop {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0 2px 12px;
+  font-size: 12px;
+  color: var(--pl-text-muted);
+  .pl-num {
+    font-weight: 600;
+  }
+}
+.funnel__drop--alarm {
+  color: var(--pl-coral);
+}
+
+.funnel__note {
+  margin-top: 12px;
+}

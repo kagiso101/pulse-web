@@ -1,0 +1,31 @@
+# CI gate: the production build type-checks the whole app (strictTemplates), the unit tests run
+# under vitest, and the built bundle is grepped for every backend secret name (spec §10 last
+# item — "No secret in any bundle"). All three must pass on `development` and `main`.
+name: CI
+
+on:
+  push:
+    branches: [main, development]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Production build (type-check + templates)
+        run: npm run build
+
+      - name: Unit tests (vitest)
+        run: npm test
+
+      - name: No secret names in the bundle
+        run: npm run check:secrets

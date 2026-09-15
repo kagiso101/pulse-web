@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.founder__big {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+
+.founder__total {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--pl-text-muted);
+}
+
+.founder__track {
+  height: 10px;
+  border-radius: 5px;
+  background: var(--pl-surface-2);
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.founder__bar {
+  height: 100%;
+  background: var(--pl-green);
+  border-radius: 5px;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}

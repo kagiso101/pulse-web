@@ -1,0 +1,23 @@
+<section class="pl-card ranked">
+  <div class="pl-card-head">
+    <h3 class="pl-section-title">{{ title() }}</h3>
+    @if (valueLabel()) {
+      <span class="pl-label">{{ valueLabel() }}</span>
+    }
+  </div>
+  @if (items().length === 0) {
+    <p class="pl-empty">{{ emptyText() }}</p>
+  } @else {
+    <ol class="ranked__list">
+      @for (row of items(); track row.label) {
+        <li class="ranked__row">
+          <span class="ranked__label" [title]="row.label">{{ row.label }}</span>
+          <span class="ranked__value pl-num">{{ row.display }}</span>
+          <span class="ranked__track" aria-hidden="true"
+            ><span class="ranked__bar" [style.width.%]="row.width"></span
+          ></span>
+        </li>
+      }
+    </ol>
+  }
+</section>

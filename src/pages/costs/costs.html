@@ -1,0 +1,112 @@
+<div class="pl-page costs">
+  <header class="pl-page-head">
+    <div>
+      <h1 class="pl-page-title">Costs</h1>
+      <p class="pl-note">What it costs to run everything, per month.</p>
+    </div>
+    <label class="pl-field costs__month">
+      <span>Month</span>
+      <input
+        type="month"
+        class="pl-input pl-input--sm pl-num"
+        [value]="costs.month()"
+        (change)="onMonth($event)"
+      />
+    </label>
+  </header>
+
+  @if (costs.error(); as e) {
+    <div class="pl-result pl-result--failed" role="alert">
+      <span>{{ e }}</span>
+      <button type="button" class="pl-btn pl-btn--sm" (click)="costs.load(costs.month())">
+        Retry
+      </button>
+    </div>
+  }
+
+  @if (costs.initialLoading()) {
+    <div class="pl-skeleton costs__skeleton" aria-hidden="true"></div>
+  } @else if (costs.report(); as r) {
+    <section class="costs__hero">
+      <pl-big-number [label]="'Total · ' + monthLabel()" [value]="r.totalCents" unit="cents" />
+    </section>
+
+    <div class="pl-grid-2">
+      <section class="pl-card">
+        <div class="pl-card-head">
+          <h2 class="pl-section-title">By provider</h2>
+        </div>
+        @if (costs.byProvider().length === 0) {
+          <p class="pl-empty">
+            Nothing recorded for {{ monthLabel() }} yet. Add a manual entry below.
+          </p>
+        } @else {
+          <ul class="providers">
+            @for (b of costs.byProvider(); track b.provider) {
+              <li class="provider">
+                <span class="provider__name">{{ providerLabel(b.provider) }}</span>
+                <span
+                  class="pl-chip"
+                  [class.pl-chip--green]="b.source === 'connector'"
+                  [class.pl-chip--muted]="b.source === 'manual'"
+                  >{{ b.source }}</span
+                >
+                <span class="provider__amount pl-num">{{ formatCents(b.amountCents) }}</span>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+
+      <section class="pl-card">
+        <div class="pl-card-head">
+          <h2 class="pl-section-title">Last 6 months</h2>
+        </div>
+        <pl-trend-bars [trend]="costs.trend()" [highlight]="costs.month()" />
+      </section>
+    </div>
+  }
+
+  <form class="pl-card manual" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="pl-card-head">
+      <h2 class="pl-section-title">Manual entry</h2>
+    </div>
+    <p class="pl-note manual__lede">
+      For providers without a connector (Netlify, Brevo, PayFast). Saving replaces that provider's
+      amount for the month.
+    </p>
+    <div class="pl-form-grid manual__grid">
+      <label class="pl-field">
+        <span>Provider</span>
+        <select class="pl-select" formControlName="provider">
+          @for (p of providers; track p) {
+            <option [value]="p">{{ providerLabel(p) }}</option>
+          }
+        </select>
+      </label>
+      <label class="pl-field">
+        <span>Month</span>
+        <input type="month" class="pl-input pl-num" formControlName="month" required />
+      </label>
+      <label class="pl-field">
+        <span>Amount (rands)</span>
+        <input
+          type="text"
+          inputmode="decimal"
+          class="pl-input pl-input--num"
+          formControlName="amount"
+          placeholder="e.g. 249,00"
+          required
+        />
+      </label>
+    </div>
+    @if (formError(); as e) {
+      <p class="pl-note pl-note--coral">{{ e }}</p>
+    }
+    <div class="pl-row manual__submit">
+      <button type="submit" class="pl-btn pl-btn--primary" [disabled]="costs.saving()">
+        {{ costs.saving() ? 'Saving…' : 'Save entry' }}
+      </button>
+    </div>
+  </form>
+</div>

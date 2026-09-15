@@ -1,0 +1,112 @@
+<div class="askbar" [class.askbar--open]="ask.panelOpen()">
+  @if (ask.panelOpen()) {
+    <section class="panel" aria-label="Ask answer" aria-live="polite">
+      <div class="panel__head">
+        <span class="panel__scope pl-label">Ask · {{ scopeLabel() }}</span>
+        <div class="panel__tools">
+          @if (ask.history().length > 0) {
+            <button
+              type="button"
+              class="pl-btn pl-btn--ghost pl-btn--sm"
+              (click)="showHistory.set(!showHistory())"
+              [attr.aria-expanded]="showHistory()"
+            >
+              <lucide-icon
+                [img]="showHistory() ? icons.down : icons.up"
+                [size]="14"
+                aria-hidden="true"
+              />
+              Last {{ ask.history().length }}
+            </button>
+          }
+          <button
+            type="button"
+            class="pl-btn pl-btn--ghost pl-btn--icon"
+            (click)="close()"
+            aria-label="Close answer"
+          >
+            <lucide-icon [img]="icons.close" [size]="16" aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+
+      @if (ask.status() !== 'idle') {
+        <p class="panel__question">{{ ask.question() }}</p>
+        <div class="panel__answer">
+          @for (line of answerLines(); track $index) {
+            <p class="panel__line">{{ line }}</p>
+          }
+          @if (ask.isStreaming() && ask.answer()) {
+            <span class="panel__cursor" aria-hidden="true"></span>
+          }
+          @if (ask.isStreaming() && !ask.answer()) {
+            <p class="panel__line pl-muted">Thinking…</p>
+          }
+        </div>
+        @if (ask.error(); as e) {
+          <p class="pl-result pl-result--failed panel__error" role="alert">{{ e }}</p>
+        }
+        <div class="panel__foot">
+          @if (ask.isStreaming()) {
+            <button type="button" class="pl-btn pl-btn--sm" (click)="ask.cancel()">
+              <lucide-icon [img]="icons.stop" [size]="12" aria-hidden="true" /> Stop
+            </button>
+          } @else {
+            <span class="pl-note">Read-only. Ask can describe, never act.</span>
+          }
+        </div>
+      }
+
+      @if (showHistory() && ask.history().length > 0) {
+        <ol class="history">
+          @for (h of ask.history(); track h.askedAt) {
+            <li class="history__item">
+              <p class="history__q">{{ h.question }}</p>
+              <p class="history__a">{{ h.answer }}</p>
+            </li>
+          }
+        </ol>
+      }
+    </section>
+  }
+
+  @if (!ask.panelOpen() && enabled()) {
+    <div class="chips" aria-label="Suggested questions">
+      @for (s of suggestions; track s) {
+        <button
+          type="button"
+          class="pl-chip-btn chips__chip"
+          (click)="send(s)"
+          [disabled]="ask.isStreaming()"
+        >
+          {{ s }}
+        </button>
+      }
+    </div>
+  }
+
+  <form class="bar" (submit)="$event.preventDefault(); send()">
+    <label class="sr-only" for="pl-ask-input">Ask about {{ scopeLabel() }}</label>
+    <input
+      id="pl-ask-input"
+      class="bar__input"
+      type="text"
+      autocomplete="off"
+      [value]="draft()"
+      (input)="onInput($event)"
+      (keydown)="onKeydown($event)"
+      [disabled]="!enabled()"
+      [placeholder]="
+        enabled() ? 'Ask about ' + scopeLabel() + '…' : 'Ask is not configured on the API yet'
+      "
+    />
+    <button type="submit" class="bar__send" [disabled]="!canSend()" aria-label="Send question">
+      <lucide-icon [img]="icons.send" [size]="18" aria-hidden="true" />
+    </button>
+  </form>
+  @if (!enabled()) {
+    <p class="bar__caption pl-note">
+      Ask needs an Anthropic key on pulse-api (Settings shows the connector as not configured).
+    </p>
+  }
+</div>
