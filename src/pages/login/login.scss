@@ -7,31 +7,48 @@
 
 .login__card {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
   display: grid;
-  gap: 14px;
-  padding: 28px 24px;
-  border-color: var(--pl-border);
-  animation: pl-fade-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  gap: 12px;
+  padding: 36px 28px 28px;
+  background: var(--pl-surface);
+  border: 1px solid var(--pl-border);
+  border-radius: var(--pl-radius-xl);
+  box-shadow: var(--pl-shadow-float);
+  animation: pl-fade-up 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.login__trace {
+  width: 96px;
+  height: 32px;
+  color: var(--pl-green-text);
+  margin-bottom: 4px;
+  path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    animation: pl-trace 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.25s backwards;
+  }
 }
 
 .login__title {
   font-family: var(--pl-font-display);
   font-weight: 750;
-  font-size: 40px;
-  line-height: 1;
-  letter-spacing: -0.01em;
+  font-size: 56px;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
 }
 
 .login__lede {
   color: var(--pl-text-soft);
-  font-size: 15px;
+  font-size: 16px;
+  line-height: 1.5;
+  max-width: 30ch;
 }
 
 .login__button {
   display: grid;
   min-height: 44px;
-  margin-top: 6px;
+  margin-top: 10px;
 }
 
 .login__gsi {
@@ -63,5 +80,5 @@
 
 .login__foot {
   text-align: center;
-  margin-top: 6px;
+  margin-top: 10px;
 }

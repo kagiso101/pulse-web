@@ -1,8 +1,19 @@
 <main class="login">
-  <section class="login__card pl-card" aria-labelledby="login-title">
-    <span class="pl-eyebrow">ROGUETECHNOLOGIES</span>
+  <section class="login__card" aria-labelledby="login-title">
+    <svg class="login__trace" viewBox="0 0 96 32" aria-hidden="true">
+      <path
+        d="M2 18h20l6-12 10 24 8-18 6 6h42"
+        pathLength="1"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linejoin="round"
+        stroke-linecap="round"
+      />
+    </svg>
     <h1 class="login__title" id="login-title">Pulse</h1>
-    <p class="login__lede">Sign in with the allow-listed Google account.</p>
+    <p class="login__lede">How every ROGUETECHNOLOGIES project is doing, on one screen.</p>
+    <p class="pl-note">Sign in with the allow-listed Google account.</p>
 
     <div class="login__button" [attr.aria-busy]="auth.isAuthenticating()">
       <div #gsi class="login__gsi" [hidden]="auth.googleClientIdMissing"></div>

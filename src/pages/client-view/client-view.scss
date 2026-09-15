@@ -17,6 +17,7 @@
   font-family: var(--pl-font-display);
   font-weight: 750;
   font-size: 18px;
+  letter-spacing: -0.02em;
   color: var(--pl-text-muted);
 }
 
@@ -27,10 +28,10 @@
 
 .client__card {
   display: grid;
-  gap: 16px;
+  gap: 18px;
   align-self: start;
   border-color: var(--pl-border);
-  padding: 20px;
+  padding: 22px;
   animation: pl-fade-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -53,19 +54,26 @@
 .client__facts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: 1px;
   margin: 0;
+  background: var(--pl-border-subtle);
+  border: 1px solid var(--pl-border-subtle);
+  border-radius: var(--pl-radius-md);
+  overflow: hidden;
+  > div {
+    background: var(--pl-surface-2);
+    padding: 12px 14px;
+  }
   dt {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    font-size: 12px;
     color: var(--pl-text-muted);
-    margin-bottom: 2px;
+    margin-bottom: 4px;
   }
   dd {
     margin: 0;
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
   }
 }
 
@@ -83,6 +91,6 @@
 
 .client__foot-brand {
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   color: var(--pl-text-soft);
 }

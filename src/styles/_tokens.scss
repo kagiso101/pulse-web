@@ -2,8 +2,10 @@
    Pulse tokens — Bookvas CI, DARK variant (PULSE-SPEC §0 Design,
    PULSE-CONTRACT §8). Prefix `--pl-`.
 
-   Porcelain text on near-black. Lacquer green = good / brand.
+   Porcelain text on near-black. Lacquer green = healthy / brand.
    Coral = something needs you — it appears ONLY for problems.
+   Selection (active pill, active range) is porcelain ink, so green
+   keeps meaning "good" rather than "selected".
    JetBrains Mono for EVERY number (.pl-num).
    Phone-first: base styles target 390px.
    ============================================================ */
@@ -15,18 +17,23 @@
   --pl-bg: #0f1211;
   --pl-surface: #161a18;
   --pl-surface-2: #1d2220;
+  --pl-surface-3: #242a27;
   --pl-border: rgba(247, 244, 239, 0.1);
   --pl-border-subtle: rgba(247, 244, 239, 0.06);
+  --pl-border-strong: rgba(247, 244, 239, 0.18);
 
   /* porcelain ink on dark */
   --pl-text: #f7f4ef;
   --pl-text-soft: #b8bdb9;
   --pl-text-muted: #7e857f;
+  --pl-ink: #f7f4ef;
+  --pl-on-ink: #0f1211;
 
   /* lacquer green — fills */
   --pl-green: #0e5a45;
   --pl-green-bright: #12735a;
   --pl-green-tint: rgba(14, 90, 69, 0.18);
+  --pl-green-glow: rgba(76, 176, 140, 0.22);
   /* green as TEXT/dots on the dark canvas needs more luminance to stay legible (≈7:1) */
   --pl-green-text: #4cb08c;
 
@@ -45,6 +52,7 @@
   --pl-radius-sm: 8px;
   --pl-radius-md: 12px;
   --pl-radius-lg: 16px;
+  --pl-radius-xl: 22px;
   --pl-radius-pill: 999px;
 
   /* spacing */
@@ -56,16 +64,17 @@
 
   /* layout */
   --pl-touch: 44px;
-  --pl-topbar-h: 52px;
+  --pl-topbar-h: 56px;
   --pl-nav-h: 60px;
   --pl-ask-h: 64px;
-  --pl-rail-w: 200px;
-  --pl-max-w: 1280px;
+  --pl-rail-w: 236px;
+  --pl-max-w: 1240px;
 
   /* motion + focus */
-  --pl-transition: all 0.2s ease;
+  --pl-transition: all 0.18s ease;
   --pl-focus: 0 0 0 2px var(--pl-bg), 0 0 0 4px var(--pl-green-text);
   --pl-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  --pl-shadow-float: 0 18px 48px rgba(0, 0, 0, 0.55), 0 1px 0 rgba(247, 244, 239, 0.06) inset;
 }
 
 /* ------------------------------------------------------------
@@ -77,21 +86,22 @@
   font-family: var(--pl-font-display);
   color: var(--pl-text);
   margin: 0;
-  letter-spacing: normal;
+  letter-spacing: -0.01em;
 }
 .pl-display-lg {
   font-weight: 700;
-  font-size: clamp(28px, 4vw, 40px);
-  line-height: 1.06;
+  font-size: clamp(32px, 4vw, 44px);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
 }
 .pl-display-md {
   font-weight: 650;
-  font-size: 22px;
+  font-size: 24px;
   line-height: 1.15;
 }
 .pl-display-sm {
   font-weight: 650;
-  font-size: 17px;
+  font-size: 18px;
   line-height: 1.25;
 }
 

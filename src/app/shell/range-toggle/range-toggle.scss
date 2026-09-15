@@ -12,8 +12,8 @@
 }
 
 .range__btn {
-  min-height: 34px;
-  min-width: 56px;
+  min-height: 32px;
+  min-width: 52px;
   padding: 0 14px;
   border-radius: var(--pl-radius-pill);
   font-size: 13px;
@@ -26,6 +26,9 @@
 }
 
 .range__btn--active {
-  background: var(--pl-green);
-  color: var(--pl-text);
+  background: var(--pl-ink);
+  color: var(--pl-on-ink);
+  &:hover {
+    color: var(--pl-on-ink);
+  }
 }

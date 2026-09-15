@@ -1,4 +1,14 @@
 <svg
+  class="sparkline sparkline--fill"
+  [attr.viewBox]="viewBox"
+  preserveAspectRatio="none"
+  aria-hidden="true"
+>
+  @if (!isEmpty()) {
+    <path [attr.d]="areaPath()" class="sparkline__area" />
+  }
+</svg>
+<svg
   class="sparkline"
   [attr.viewBox]="viewBox"
   preserveAspectRatio="none"
@@ -15,7 +25,6 @@
       vector-effect="non-scaling-stroke"
     />
   } @else {
-    <path [attr.d]="areaPath()" class="sparkline__area" />
     <path [attr.d]="linePath()" class="sparkline__line" vector-effect="non-scaling-stroke" />
   }
 </svg>

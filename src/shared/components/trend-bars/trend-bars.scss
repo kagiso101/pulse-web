@@ -11,13 +11,13 @@
   grid-auto-columns: minmax(0, 1fr);
   gap: 8px;
   align-items: end;
-  height: 140px;
+  height: 150px;
 }
 
 .trend__col {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  gap: 4px;
+  gap: 6px;
   height: 100%;
   min-width: 0;
   text-align: center;
@@ -40,14 +40,12 @@
 .trend__bar {
   display: block;
   width: 100%;
-  border-radius: 6px 6px 2px 2px;
-  background: var(--pl-surface-2);
-  border: 1px solid var(--pl-border);
+  border-radius: 6px 6px 3px 3px;
+  background: var(--pl-surface-3);
   transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .trend__col--active .trend__bar {
-  background: var(--pl-green);
-  border-color: transparent;
+  background: linear-gradient(180deg, var(--pl-green-text), var(--pl-green));
 }
 
 .trend__label {

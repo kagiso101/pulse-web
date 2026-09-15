@@ -6,21 +6,19 @@
 .email__grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  gap: 10px;
   margin: 0;
   dt {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    font-size: 12px;
     color: var(--pl-text-muted);
-    margin-bottom: 2px;
+    margin-bottom: 4px;
   }
   dd {
     margin: 0;
     font-size: 14px;
     color: var(--pl-text-soft);
     .pl-num {
-      font-weight: 600;
+      font-weight: 500;
       color: var(--pl-text);
     }
     &.pl-coral .pl-num {
@@ -33,5 +31,5 @@
 }
 
 .email__note {
-  margin-top: 10px;
+  margin-top: 12px;
 }

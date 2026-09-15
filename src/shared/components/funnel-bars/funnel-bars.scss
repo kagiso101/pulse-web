@@ -7,12 +7,12 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 6px;
+  gap: 8px;
 }
 
 .funnel__step {
   display: grid;
-  gap: 4px;
+  gap: 5px;
 }
 
 .funnel__meta {
@@ -28,21 +28,21 @@
 }
 
 .funnel__count {
-  font-weight: 600;
+  font-weight: 500;
   font-size: 15px;
 }
 
 .funnel__track {
-  height: 14px;
-  border-radius: 7px;
+  height: 10px;
+  border-radius: 5px;
   background: var(--pl-surface-2);
   overflow: hidden;
 }
 
 .funnel__bar {
   height: 100%;
-  border-radius: 7px;
-  background: var(--pl-green);
+  border-radius: 5px;
+  background: linear-gradient(90deg, var(--pl-green), var(--pl-green-text));
   transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .funnel__bar--empty {
@@ -55,11 +55,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 2px 0 2px 12px;
+  padding: 0 0 0 12px;
   font-size: 12px;
   color: var(--pl-text-muted);
   .pl-num {
-    font-weight: 600;
+    font-weight: 500;
   }
 }
 .funnel__drop--alarm {
@@ -67,5 +67,5 @@
 }
 
 .funnel__note {
-  margin-top: 12px;
+  margin-top: 14px;
 }

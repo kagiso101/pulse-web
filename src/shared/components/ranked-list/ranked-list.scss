@@ -8,13 +8,13 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 
 .ranked__row {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 2px 10px;
+  gap: 4px 10px;
   font-size: 14px;
 }
 
@@ -27,13 +27,14 @@
 }
 
 .ranked__value {
-  font-weight: 600;
+  font-weight: 500;
   text-align: right;
+  color: var(--pl-text);
 }
 
 .ranked__track {
   grid-column: 1 / -1;
-  height: 4px;
+  height: 3px;
   border-radius: 2px;
   background: var(--pl-surface-2);
   overflow: hidden;
@@ -42,6 +43,7 @@
 .ranked__bar {
   display: block;
   height: 100%;
-  background: var(--pl-green-bright);
+  background: var(--pl-green-text);
+  opacity: 0.75;
   border-radius: 2px;
 }

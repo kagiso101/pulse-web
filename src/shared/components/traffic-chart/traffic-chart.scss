@@ -1,20 +1,22 @@
 :host {
   display: block;
+  min-width: 0;
 }
 
 .chart {
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 
 .chart__legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 16px;
+  gap: 6px 18px;
   font-size: 13px;
   color: var(--pl-text-soft);
   b {
-    font-weight: 600;
+    font-weight: 500;
+    font-size: 14px;
     color: var(--pl-text);
     margin-left: 4px;
   }
@@ -23,12 +25,12 @@
 .chart__key {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
 }
 
 .chart__swatch {
   display: inline-block;
-  width: 12px;
+  width: 14px;
   height: 3px;
   border-radius: 2px;
 }
@@ -39,17 +41,21 @@
   background: var(--pl-text-muted);
 }
 
+/* The plot row has a FIXED height and the SVGs are absolutely positioned inside it.
+   An SVG with a viewBox has an intrinsic aspect ratio; left in flow with height:100% inside an
+   auto-sized grid row it grows to its own width in height and overflows the card. */
 .chart__body {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 8px;
-  height: 160px;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: 172px auto;
+  gap: 6px 10px;
 }
 .chart--compact .chart__body {
-  height: 110px;
+  grid-template-rows: 116px auto;
 }
 
 .chart__y {
+  grid-row: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -58,34 +64,44 @@
   color: var(--pl-text-muted);
   line-height: 1;
   padding: 2px 0;
+  min-width: 22px;
 }
 
 .chart__plot {
+  grid-row: 1;
   position: relative;
   min-width: 0;
-  border-left: 1px solid var(--pl-border-subtle);
-  border-bottom: 1px solid var(--pl-border-subtle);
-  svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-    overflow: visible;
-  }
+  overflow: hidden;
+  border-left: 1px solid var(--pl-border);
+  border-bottom: 1px solid var(--pl-border);
+}
+
+.chart__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+.chart__layer--fill {
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.05));
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.05));
 }
 
 .chart__grid {
-  stroke: var(--pl-border-subtle);
+  stroke: var(--pl-border);
   stroke-width: 1;
-  stroke-dasharray: 3 3;
+  stroke-dasharray: 3 4;
 }
 
 .chart__area {
-  fill: var(--pl-green-tint);
+  fill: rgba(76, 176, 140, 0.28);
 }
 
 .chart__line {
   fill: none;
-  stroke-width: 1.8;
+  stroke-width: 2;
   stroke-linejoin: round;
   stroke-linecap: round;
 }
@@ -94,7 +110,7 @@
 }
 .chart__line--sessions {
   stroke: var(--pl-text-muted);
-  stroke-width: 1.2;
+  stroke-width: 1.25;
 }
 
 .chart__empty {
@@ -106,9 +122,10 @@
 }
 
 .chart__x {
+  grid-column: 2;
+  grid-row: 2;
   display: flex;
   justify-content: space-between;
-  padding-left: 34px;
   font-size: 11px;
   color: var(--pl-text-muted);
 }

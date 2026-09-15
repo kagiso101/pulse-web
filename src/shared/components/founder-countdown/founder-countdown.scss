@@ -4,21 +4,23 @@
 }
 
 .founder__big {
-  font-size: 28px;
-  font-weight: 600;
-  line-height: 1.1;
-  margin-bottom: 10px;
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
 }
 
 .founder__total {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400;
+  letter-spacing: 0;
   color: var(--pl-text-muted);
 }
 
 .founder__track {
-  height: 10px;
-  border-radius: 5px;
+  height: 8px;
+  border-radius: 4px;
   background: var(--pl-surface-2);
   overflow: hidden;
   margin-bottom: 10px;
@@ -26,7 +28,7 @@
 
 .founder__bar {
   height: 100%;
-  background: var(--pl-green);
-  border-radius: 5px;
+  background: linear-gradient(90deg, var(--pl-green), var(--pl-green-text));
+  border-radius: 4px;
   transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }

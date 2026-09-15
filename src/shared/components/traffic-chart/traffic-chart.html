@@ -20,7 +20,18 @@
       @if (isEmpty()) {
         <p class="chart__empty pl-muted">No traffic points in this range.</p>
       } @else {
+        <!-- fill and lines are separate layers so the fill can fade with a CSS mask
+             (no url(#gradient) references — those break under <base href> in some browsers) -->
         <svg
+          class="chart__layer chart__layer--fill"
+          [attr.viewBox]="viewBox"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path [attr.d]="usersArea()" class="chart__area" />
+        </svg>
+        <svg
+          class="chart__layer"
           [attr.viewBox]="viewBox"
           preserveAspectRatio="none"
           role="img"
@@ -34,7 +45,6 @@
             class="chart__grid"
             vector-effect="non-scaling-stroke"
           />
-          <path [attr.d]="usersArea()" class="chart__area" />
           <path
             [attr.d]="sessionsPath()"
             class="chart__line chart__line--sessions"
@@ -48,11 +58,10 @@
         </svg>
       }
     </div>
-  </div>
-
-  <div class="chart__x">
-    @for (label of xLabels(); track $index) {
-      <span class="pl-num">{{ label }}</span>
-    }
+    <div class="chart__x">
+      @for (label of xLabels(); track $index) {
+        <span class="pl-num">{{ label }}</span>
+      }
+    </div>
   </div>
 </div>

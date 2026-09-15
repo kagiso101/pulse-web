@@ -12,62 +12,96 @@
   justify-items: start;
 }
 
+/* the project header is the hero: name first, then one strip of facts */
 .project__head {
   display: grid;
-  gap: 14px;
+  gap: 16px;
+  padding-top: 4px;
 }
 
 .project__title {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
+  gap: 8px 12px;
   .pl-page-title {
-    margin-right: 2px;
+    order: -1;
+    flex-basis: 100%;
   }
 }
 
 .project__facts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px 16px;
+  gap: 1px;
   margin: 0;
+  background: var(--pl-border-subtle);
+  border: 1px solid var(--pl-border-subtle);
+  border-radius: var(--pl-radius-lg);
+  overflow: hidden;
+  > div {
+    background: var(--pl-surface);
+    padding: 14px 16px 12px;
+    min-width: 0;
+  }
   dt {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    font-size: 13px;
     color: var(--pl-text-muted);
-    margin-bottom: 2px;
+    margin-bottom: 6px;
   }
   dd {
     margin: 0;
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 }
 
-.project__deploy {
+.project__deploy,
+.project__site {
   grid-column: 1 / -1;
-  dd {
-    font-weight: 500;
-  }
+}
+
+.project__deploy dd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.5;
+  white-space: normal;
+}
+
+.project__site dd {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.5;
 }
 
 .project__sha {
-  font-weight: 600;
+  font-weight: 500;
+  color: var(--pl-text);
   background: var(--pl-surface-2);
   border-radius: 6px;
-  padding: 2px 6px;
+  padding: 2px 7px;
 }
 
 @media (min-width: 768px) {
+  .project__title .pl-page-title {
+    flex-basis: auto;
+  }
   .project__facts {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
-  .project__deploy {
+  .project__deploy,
+  .project__site {
     grid-column: auto;
   }
 }

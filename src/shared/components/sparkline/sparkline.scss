@@ -1,25 +1,35 @@
+/* Two absolutely positioned layers (fill under, line over) inside a fixed-height host, so the
+   SVGs never dictate layout height. The fill fades out with a CSS mask. */
 :host {
   display: block;
+  position: relative;
   width: 100%;
-  height: 36px;
+  height: 40px;
 }
 
 .sparkline {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   overflow: visible;
 }
 
+.sparkline--fill {
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent);
+}
+
 .sparkline__line {
   fill: none;
   stroke: var(--pl-green-text);
-  stroke-width: 1.6;
+  stroke-width: 1.75;
   stroke-linejoin: round;
   stroke-linecap: round;
 }
 
 .sparkline__area {
-  fill: var(--pl-green-tint);
+  fill: rgba(76, 176, 140, 0.3);
 }
 
 .sparkline__empty {

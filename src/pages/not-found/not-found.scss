@@ -11,5 +11,9 @@
   justify-items: start;
   max-width: 400px;
   width: 100%;
-  padding: 28px 24px;
+  padding: 32px 28px;
+  border-radius: var(--pl-radius-xl);
+  .pl-btn {
+    margin-top: 8px;
+  }
 }

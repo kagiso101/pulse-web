@@ -12,7 +12,7 @@
       <p class="pl-result pl-result--failed" role="alert">{{ e }} — showing the last good data.</p>
     }
 
-    <header class="pl-card project__head">
+    <header class="project__head">
       <div class="project__title">
         <pl-status-dot [state]="dash.header.status" [showLabel]="true" />
         <h1 class="pl-page-title">{{ dash.project.name }}</h1>
@@ -38,16 +38,16 @@
             @if (lastDeploy(); as ld) {
               <code class="pl-num project__sha">{{ ld.sha }}</code>
               @if (ld.branch) {
-                <span class="pl-muted">· {{ ld.branch }}</span>
+                <span class="pl-muted">{{ ld.branch }}</span>
               }
-              <span class="pl-muted">·</span> <span class="pl-num">{{ ld.when }}</span>
+              <span class="pl-num pl-muted">{{ ld.when }}</span>
             } @else {
               <span class="pl-muted">—</span>
             }
           </dd>
         </div>
         @if (dash.project.siteUrl; as site) {
-          <div>
+          <div class="project__site">
             <dt>Site</dt>
             <dd>
               <a [href]="site" target="_blank" rel="noopener">{{ hostOf(site) }}</a>
@@ -60,17 +60,18 @@
     @if (dash.traffic.available) {
       <section class="pl-card">
         <div class="pl-card-head">
-          <h2 class="pl-section-title">Traffic · {{ rangeLabel() }}</h2>
+          <h2 class="pl-section-title">Traffic</h2>
+          <span class="pl-label">{{ rangeLabel() }}</span>
         </div>
         <pl-traffic-chart [series]="dash.traffic.series" />
       </section>
       <div class="pl-grid-3">
-        <pl-ranked-list title="Top pages" [rows]="topPages()" valueLabel="views" />
-        <pl-ranked-list title="Sources" [rows]="sources()" valueLabel="sessions" />
+        <pl-ranked-list title="Top pages" [rows]="topPages()" valueLabel="Views" />
+        <pl-ranked-list title="Sources" [rows]="sources()" valueLabel="Sessions" />
         <pl-ranked-list
           title="Key events"
           [rows]="keyEvents()"
-          valueLabel="count"
+          valueLabel="Count"
           emptyText="No key events yet — file_download, click and scroll appear here."
         />
       </div>
@@ -129,7 +130,7 @@
     <section class="pl-card">
       <div class="pl-card-head">
         <h2 class="pl-section-title">Deploys</h2>
-        <a routerLink="/deploys" class="pl-note">All deploys →</a>
+        <a routerLink="/deploys" class="pl-btn pl-btn--ghost pl-btn--sm">All deploys</a>
       </div>
       <pl-deploy-list
         [deploys]="dash.deploys"

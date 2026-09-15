@@ -5,13 +5,14 @@
 .refresh {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 }
 
 .refresh__text {
   font-size: 12px;
   color: var(--pl-text-muted);
   white-space: nowrap;
+  padding-right: 4px;
 }
 
 .spin {
@@ -24,7 +25,7 @@
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 480px) {
   .refresh__text {
     display: none;
   }
