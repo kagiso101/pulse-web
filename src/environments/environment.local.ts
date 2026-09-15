@@ -4,5 +4,5 @@
 export const environment = {
   production: false,
   apiBaseUrl: 'http://localhost:8090',
-  googleClientId: 'REPLACE_WITH_GOOGLE_CLIENT_ID',
+  googleClientId: '898880840502-6qccedb3e85eom5e8oqtsfhg2ihrmark.apps.googleusercontent.com',
 };

@@ -4,5 +4,5 @@
 export const environment = {
   production: true,
   apiBaseUrl: 'https://pulse-api-898880840502.africa-south1.run.app',
-  googleClientId: 'REPLACE_WITH_GOOGLE_CLIENT_ID',
+  googleClientId: '898880840502-6qccedb3e85eom5e8oqtsfhg2ihrmark.apps.googleusercontent.com',
 };
