@@ -5,7 +5,13 @@ export type AlertKind =
   | 'site_down'
   | 'email_failures'
   | 'tenant_grace'
-  | 'prospect_overdue';
+  | 'prospect_overdue'
+  // OPS-VISIBILITY (2026-09-30): one kind per Bookvas platform event type
+  | 'checkout_stalled'
+  | 'payment_provider_degraded'
+  | 'signup_rate_limited'
+  | 'plan_price_changed'
+  | 'merchant_verification_stalled';
 
 export type Channel = 'whatsapp' | 'email' | 'in_app';
 
